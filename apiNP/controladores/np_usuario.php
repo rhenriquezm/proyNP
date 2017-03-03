@@ -42,7 +42,7 @@ class np_usuario
 
     {
         if ($peticion[0] == 'registro') { // Si la peticion es igual a registro, se registra un nuevo usuario
-            return self::registrar(); // Se devuelve el resultado de la
+            return self::registrar();     // Se devuelve el resultado de la
         } else if ($peticion[0] == 'login') {
             return self::loguear();
         } else {
@@ -66,7 +66,7 @@ class np_usuario
                 return
                     [
                     "estado"  => self::ESTADO_CREACION_EXITOSA,
-                    "mensaje" => utf8_encode("¡Registro con éxito!"),
+                    "mensaje" => utf8_encode("Â¡Registro con Ã©xito!"),
                 ];
                 break;
             case self::ESTADO_CREACION_FALLIDA:
@@ -80,7 +80,7 @@ class np_usuario
     /**
      * Crea un nuevo usuario en la tabla "usuario"
      * @param mixed $datosUsuario columnas del registro
-     * @return int codigo para determinar si la inserción fue exitosa
+     * @return int codigo para determinar si la inserciÃ³n fue exitosa
      */
     private function crear($datosUsuario)
     {
@@ -126,7 +126,7 @@ class np_usuario
     }
 
     /**
-     * Protege la contraseña con un algoritmo de encriptado
+     * Protege la contraseÃ±a con un algoritmo de encriptado
      * @param $contrasenaPlana
      * @return bool|null|string
      */
@@ -170,7 +170,7 @@ class np_usuario
             }
         } else {
             throw new ExcepcionApi(self::ESTADO_PARAMETROS_INCORRECTOS,
-                utf8_encode("Correo o contraseña inválidos"));
+                utf8_encode("Correo o contraseÃ±a invÃ¡lidos"));
         }
     }
 
@@ -215,7 +215,7 @@ class np_usuario
 
     private function obtenerUsuarioPorCorreo($email)
     {
-        $comando = "SELECT " .
+        $comando = "SELECT " . 
         self::NOMBRES . "," .
         self::APPATERNO . 
         " FROM " . self::NOMBRE_TABLA .
@@ -256,7 +256,7 @@ class np_usuario
         } else {
             throw new ExcepcionApi(
                 self::ESTADO_AUSENCIA_CLAVE_API,
-                utf8_encode("Se requiere Clave del API para autenticación"));
+                utf8_encode("Se requiere Clave del API para autenticaciÃ³n"));
         }
     }
 

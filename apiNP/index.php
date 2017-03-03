@@ -1,7 +1,7 @@
 <?php
 
-require 'controladores/usuarios.php';
-require 'controladores/contactos.php';
+//require 'controladores/usuarios.php';
+//require 'controladores/contactos.php';
 require 'controladores/np_usuario.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
