@@ -1,0 +1,16 @@
+1) Para clonar
+
+	* git clone "repositorio"
+
+2) Para igualar tu respositorio local con el de la nube
+
+	* git pull
+
+3) Para subir tus cambios a la nube
+
+	*git add .
+	*git commit add -m "Mensaje Cualquiera"
+	*git push origin master
+
+
+SACADO DE: http://rogerdudler.github.io/git-guide/index.es.html
