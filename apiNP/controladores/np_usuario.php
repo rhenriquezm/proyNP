@@ -42,13 +42,14 @@ class np_usuario
 
     {
         if ($peticion[0] == 'registro') { // Si la peticion es igual a registro, se registra un nuevo usuario
-            return self::registrar(); // Se devuelve el resultado de la
+            return self::registrar();     // Se devuelve el resultado de la
         } else if ($peticion[0] == 'login') {
             return self::loguear();
         } else {
             throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
         }
     }
+
 
     //Crea un nuevo usuario en la base de datos
 
@@ -160,8 +161,8 @@ class np_usuario
 
             if ($usuarioBD != null) {
                 http_response_code(200);
-                $respuesta["nombres"]    = $usuarioBD["nombres"];
-                $respuesta["ap_paterno"] = $usuarioBD["ap_paterno"];
+                $respuesta["nombres"] = $usuarioBD["nombres"];
+                $respuesta["ap_paterno"]   = $usuarioBD["ap_paterno"];
                 return ["estado" => 1, "usuario" => $respuesta];
             } else {
                 throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
@@ -214,9 +215,9 @@ class np_usuario
 
     private function obtenerUsuarioPorCorreo($email)
     {
-        $comando = "SELECT " .
+        $comando = "SELECT " . 
         self::NOMBRES . "," .
-        self::APPATERNO .
+        self::APPATERNO . 
         " FROM " . self::NOMBRE_TABLA .
         " WHERE " . self::EMAIL . " =:email";
 
