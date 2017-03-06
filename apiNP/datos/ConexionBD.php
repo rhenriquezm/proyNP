@@ -1,31 +1,17 @@
 <?php
-/**
- * Clase que envuelve una instancia de la clase PDO
- * para el manejo de la base de controladores
- */
 
 require_once 'login_mysql.php';
 
 class ConexionBD
 {
-
-    /**
-     * Única instancia de la clase
-     */
     private static $db = null;
-
-    /**
-     * Instancia de PDO
-     */
     private static $pdo;
 
     final private function __construct()
     {
         try {
-            // Crear nueva conexión PDO
             self::obtenerBD();
         } catch (PDOException $e) {
-            // Manejo de excepciones
         }
 
     }
@@ -58,16 +44,12 @@ class ConexionBD
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
 
-            // Habilitar excepciones
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
         return self::$pdo;
     }
 
-    /**
-     * Evita la clonación del objeto
-     */
     final protected function __clone()
     {
     }

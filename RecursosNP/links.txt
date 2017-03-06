@@ -1,0 +1,11 @@
+- localStorage, cookies
+
+https://www.npmjs.com/package/angular-local-storage
+
+-ionic infinite scroll
+
+http://codepen.io/d4dilip/post/ionic-infinite-scroll-app-example
+
+-ionic validaciones
+
+https://docs.angularjs.org/api/ng/directive/form

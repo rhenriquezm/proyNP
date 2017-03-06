@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('app.controllers', [])
+    var app = angular.module('app.controllers', [''])
     app.factory("loginFactory", function() {
         return {
             data: {}
