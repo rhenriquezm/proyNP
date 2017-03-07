@@ -21,7 +21,8 @@ class np_region
     const ESTADO_FALLA_DESCONOCIDA      = 7;
     const ESTADO_PARAMETROS_INCORRECTOS = 8;
 
-    public static function post($peticion) {
+    public static function post($peticion)
+    {
         if ($peticion[0] == 'region') {
             return self::obtenerRegion();
 
@@ -45,7 +46,6 @@ class np_region
             http_response_code(200);
 
             $respuesta["nombre"] = $regionBD["nombre"];
-            
 
             return ["estado" => 1, "region" => $respuesta];
         } else {
@@ -73,6 +73,35 @@ class np_region
 
             if ($sentencia->execute()) {
                 return $sentencia->fetch(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e) {
+
+        }
+    }
+
+    public function obtenerNombreRegionID($id)
+    {
+
+        $comando = "SELECT " .
+        self::NOMBRE .
+        " FROM " .
+        self::NOMBRE_TABLA .
+        " WHERE " .
+        self::ID . " =:id";
+
+        try {
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
+
+            $sentencia->bindParam("id", $id);
+
+            if ($sentencia->execute()) {
+                $region       = $sentencia->fetch(PDO::FETCH_ASSOC);
+                $nombreRegion = $region["nombre"];
+                return $nombreRegion;
+
             } else {
                 return null;
             }

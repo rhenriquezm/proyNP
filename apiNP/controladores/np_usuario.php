@@ -201,7 +201,9 @@ class np_usuario
             $respuesta["sexo"]                  = $usuarioBD["sexo"];
             $respuesta["fec_nacimiento"]        = $usuarioBD["fec_nacimiento"];
             $respuesta["idRegion"]              = $usuarioBD["idRegion"];
+            $respuesta["nombreRegion"]          = np_region::obtenerNombreRegionID($usuarioBD["idRegion"]);
             $respuesta["idPais"]                = $usuarioBD["idPais"];
+            $respuesta["nombrePais"]            = np_pais::obtenerNombrePaisID($usuarioBD["idPais"]);
             $respuesta["url_avatar"]            = $usuarioBD["url_avatar"];
 
             return ["estado" => 1, "usuario" => $respuesta];
