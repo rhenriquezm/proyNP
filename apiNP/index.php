@@ -3,6 +3,7 @@
 //require 'controladores/usuarios.php';
 //require 'controladores/contactos.php';
 require 'controladores/np_usuario.php';
+require 'controladores/np_pais.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExcepcionApi.php';
@@ -48,7 +49,7 @@ if (isset($_GET['PATH_INFO'])) {
 
 // Obtener recurso
 $recurso             = array_shift($peticion);
-$recursos_existentes = array('contactos', 'usuarios', 'np_usuario');
+$recursos_existentes = array('contactos', 'usuarios', 'np_usuario', 'np_pais');
 
 // Comprobar si existe el recurso
 if (!in_array($recurso, $recursos_existentes)) {
@@ -59,24 +60,37 @@ if (!in_array($recurso, $recursos_existentes)) {
 $metodo = strtolower($_SERVER['REQUEST_METHOD']);
 
 // Filtrar método
-switch ($metodo) {
-    case 'get':
-    case 'post':
-        $vista->imprimir(np_usuario::post($peticion));
-    case 'put':
-    case 'delete':
-        if (method_exists($recurso, $metodo)) {
-            $respuesta = call_user_func(array($recurso, $metodo), $peticion);
-            $vista->imprimir($respuesta);
-            break;
-        }
-    default:
-        // Método no aceptado
-        $vista->estado = 405;
-        $cuerpo        = [
-            "estado"  => ESTADO_METODO_NO_PERMITIDO,
-            "mensaje" => utf8_encode("Método no permitido"),
-        ];
-        $vista->imprimir($cuerpo);
 
+if ($recurso == 'np_usuario') {
+    switch ($metodo) {
+        case 'get':
+        case 'post':
+            $vista->imprimir(np_usuario::post($peticion));
+        case 'put':
+        case 'delete':
+        default:
+            // Método no aceptado
+            $vista->estado = 405;
+            $cuerpo        = [
+                "estado"  => ESTADO_METODO_NO_PERMITIDO,
+                "mensaje" => utf8_encode("Método no permitido"),
+            ];
+            $vista->imprimir($cuerpo);
+    }
+} else if ($recurso == 'np_pais') {
+    switch ($metodo) {
+        case 'get':
+        case 'post':
+            $vista->imprimir(np_pais::post($peticion));
+        case 'put':
+        case 'delete':
+        default:
+            // Método no aceptado
+            $vista->estado = 405;
+            $cuerpo        = [
+                "estado"  => ESTADO_METODO_NO_PERMITIDO,
+                "mensaje" => utf8_encode("Método no permitido"),
+            ];
+            $vista->imprimir($cuerpo);
+    }
 }

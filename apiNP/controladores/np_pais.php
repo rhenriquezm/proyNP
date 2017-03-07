@@ -1,17 +1,15 @@
 <?php
 
-require '/../datos/ConexionBD.php';
+require_once '/../datos/ConexionBD.php';
 
 class np_pais
 {
     // Datos de la tabla "np_pais"
-    
-    
-    const NOMBRE_TABLA  = "np_pais";
-    const ID            = "id";
-    const NOMBRE         = "nombre";
-    const FECHAACTU         = "fecha_actu";
-    
+
+    const NOMBRE_TABLA = "np_pais";
+    const ID           = "id";
+    const NOMBRE       = "nombre";
+    const FECHAACTU    = "fecha_actu";
 
     const ESTADO_CREACION_EXITOSA       = 1;
     const ESTADO_CREACION_FALLIDA       = 2;
@@ -22,48 +20,50 @@ class np_pais
     const ESTADO_FALLA_DESCONOCIDA      = 7;
     const ESTADO_PARAMETROS_INCORRECTOS = 8;
 
-   
-    public static function($peticion){
-        if($peticion[0] == 'pais'){
+    public static function post($peticion) {
+        if ($peticion[0] == 'pais') {
             return self::obtenerPais();
-            
-            
+
         }
-            
+
     }
 
-
-    private function obtenerPais(){
+    private function obtenerPais()
+    {
         $respuesta = array();
-        
+
         $body = file_get_contents('php://input');
-        
+
         $pais = json_decode($body);
-        
+
         $id = $pais->id;
-        
+
         $paisBD = self::obtenerPaisID($id);
-        
-        if($paisBD !=null){
+
+        if ($paisBD != null) {
             http_response_code(200);
-            
+
             $respuesta["nombre"] = $paisBD["nombre"];
-                
+
             return ["estado" => 1, "pais" => $respuesta];
-        }else{
-            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,"Ha ocurrido un error");
+        } else {
+            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA, "Ha ocurrido un error");
         }
-        
-        
+
     }
-    
-    private function obtenerPaisID($id){
-        
-        $comando = "SELECT " . 
-        self::NOMBRE . 
-        " FROM " . self::NOMBRE_TABLA .
-        " WHERE " . self::ID . " =:id"; 
-        
+
+    private function obtenerPaisID($id)
+    {
+
+        $comando = "SELECT " .
+        self::NOMBRE .
+        " FROM " .
+        self::NOMBRE_TABLA .
+        " WHERE " .
+        self::ID . " =:id";
+
+        echo $comando;
+
         try {
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
 

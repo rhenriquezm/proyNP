@@ -1,6 +1,6 @@
 <?php
 
-require '/../datos/ConexionBD.php';
+require_once '/../datos/ConexionBD.php';
 
 class np_usuario
 {
