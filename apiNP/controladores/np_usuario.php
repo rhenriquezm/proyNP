@@ -6,11 +6,12 @@ class np_usuario
 {
     // Datos de la tabla "np_usuario"
     const NOMBRE_TABLA  = "np_usuario";
+    const ID            = "id";
     const EMAIL         = "email";
     const NOMBRES       = "nombres";
     const APPATERNO     = "ap_paterno";
     const APMATERNO     = "ap_materno";
-    const NRODOCUMENTO  = "nro_documento";
+    const NRODOCUMENTO  = "nro_documento_identif";
     const CLAVE         = "clave";
     const FECACTU       = "fec_actu";
     const SEXO          = "sexo";
@@ -18,12 +19,12 @@ class np_usuario
     const IDFACEBOOK    = "id_facebook";
     const FECNACIMIENTO = "fec_nacimiento";
     const FECREGISTRO   = "fec_registro";
-    const IDCOMUNA      = "id_comuna";
-    const IDREGION      = "id_region";
-    const IDPAIS        = "id_pais";
+    const IDCOMUNA      = "idComuna";
+    const IDREGION      = "idRegion";
+    const IDPAIS        = "idPais";
     const CODIGO        = "codigo";
     const URLAVATAR     = "url_avatar";
-    const IDCONVENIO    = "id_convenio";
+    const IDCONVENIO    = "idConvenio";
     const DIRECCION     = "direccion";
     const FONO          = "fono";
 
@@ -42,14 +43,16 @@ class np_usuario
 
     {
         if ($peticion[0] == 'registro') { // Si la peticion es igual a registro, se registra un nuevo usuario
-            return self::registrar();     // Se devuelve el resultado de la
+            return self::registrar(); // Se devuelve el resultado de la
         } else if ($peticion[0] == 'login') {
             return self::loguear();
+        } else if ($peticion[0] == 'usuario') {
+            return self::obtenerPerfil();
+
         } else {
             throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
         }
     }
-
 
     //Crea un nuevo usuario en la base de datos
 
@@ -161,8 +164,10 @@ class np_usuario
 
             if ($usuarioBD != null) {
                 http_response_code(200);
-                $respuesta["nombres"] = $usuarioBD["nombres"];
-                $respuesta["ap_paterno"]   = $usuarioBD["ap_paterno"];
+
+                $respuesta["id"]         = $usuarioBD["id"];
+                $respuesta["nombres"]    = $usuarioBD["nombres"];
+                $respuesta["ap_paterno"] = $usuarioBD["ap_paterno"];
                 return ["estado" => 1, "usuario" => $respuesta];
             } else {
                 throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
@@ -172,6 +177,74 @@ class np_usuario
             throw new ExcepcionApi(self::ESTADO_PARAMETROS_INCORRECTOS,
                 utf8_encode("Correo o contraseña inválidos"));
         }
+    }
+
+    private function obtenerPerfil()
+    {
+        $respuesta = array();
+
+        $body = file_get_contents('php://input');
+
+        $usuario = json_decode($body);
+
+        $id = $usuario->id;
+
+        $usuarioBD = self::obtenerUsuarioPorId($id);
+
+        if ($usuarioBD != null) {
+            http_response_code(200);
+
+            $respuesta["nombres"]               = $usuarioBD["nombres"];
+            $respuesta["ap_paterno"]            = $usuarioBD["ap_paterno"];
+            $respuesta["ap_materno"]            = $usuarioBD["ap_materno"];
+            $respuesta["nro_documento_identif"] = $usuarioBD["nro_documento_identif"];
+            $respuesta["sexo"]                  = $usuarioBD["sexo"];
+            $respuesta["fec_nacimiento"]        = $usuarioBD["fec_nacimiento"];
+            $respuesta["idRegion"]              = $usuarioBD["idRegion"];
+            $respuesta["idPais"]                = $usuarioBD["idPais"];
+            $respuesta["url_avatar"]            = $usuarioBD["url_avatar"];
+
+            return ["estado" => 1, "usuario" => $respuesta];
+        } else {
+            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
+                "Ha ocurrido un error");
+        }
+
+    }
+
+    private function obtenerUsuarioPorId($id)
+    {
+        $comando = "SELECT " .
+
+        self::EMAIL . "," .
+        self::NOMBRES . "," .
+        self::APPATERNO . "," .
+        self::APMATERNO . "," .
+        self::FECREGISTRO . "," .
+        self::SEXO . "," .
+        self::FECNACIMIENTO . "," .
+        self::NRODOCUMENTO . "," .
+        self::IDPAIS . "," .
+        self::IDREGION . "," .
+        self::URLAVATAR .
+        " FROM " . self::NOMBRE_TABLA .
+        " WHERE " . self::ID . " =:id";
+
+        try {
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
+
+            $sentencia->bindParam("id", $id);
+
+            if ($sentencia->execute()) {
+                return $sentencia->fetch(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e) {
+
+        }
+
     }
 
     private function autenticar($email, $clave)
@@ -215,9 +288,10 @@ class np_usuario
 
     private function obtenerUsuarioPorCorreo($email)
     {
-        $comando = "SELECT " . 
+        $comando = "SELECT " .
+        self::ID . "," .
         self::NOMBRES . "," .
-        self::APPATERNO . 
+        self::APPATERNO .
         " FROM " . self::NOMBRE_TABLA .
         " WHERE " . self::EMAIL . " =:email";
 
