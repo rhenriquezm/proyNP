@@ -1,0 +1,34 @@
+<ion-view hide-nav-bar="true" id="page1" title="Home">
+    <ion-content class="manual-ios-statusbar-padding" padding="false" scroll="false" style="background: url(img/xIKAKcpTGiz62CV6SI8A_fondo-01.jpg) no-repeat center;background-size:cover;">
+        <div class="banner1">
+            <a href-inappbrowser="http://www.parquedelmar.cl/index.html" style="display:block;">
+                <img src="img/Y5IKvj3hS4PCx6aifgIw_pdm-01.jpg" style="display: block; width: auto; height: 100%; margin-left: auto; margin-right: auto;">
+                </img>
+            </a>
+        </div>
+        <div class="logo">
+            <img src="img/WqwPZyRMQ063segcK49Q_logo-01.png" style="display: block; width: auto; height: auto; margin-left: auto; margin-right: auto;">
+            </img>
+        </div>
+        <form class="list" id="home-form6">
+            <label class="item item-input inp" id="home-input3">
+                <input ng-model="np_usuario.email" placeholder="Usuario" type="text">
+                </input>
+            </label>
+            <label class="item item-input inp" id="home-input4">
+                <input ng-model="np_usuario.clave" placeholder="Clave" type="password">
+                </input>
+            </label>
+        </form>
+        <!-- Dirigimos el evento del boton hacia la funcion login() del controlador homeCtrl-->
+        <a class="button button-positive boton" id="home-button1" ng-click="login()">
+            Ingresar
+        </a>
+        <a class="button button-light button-clear boton2" id="home-button2" style="font-weight:600;color:#2075BB;font-size:12px;text-align:right;" ui-sref="menu.page18">
+            Olvidé mi Contraseña
+        </a>
+        <a class="button button-light button-clear boton1" id="home-button3" style="font-weight:600;color:#2075BB;font-size:12px;text-align:left;" ui-sref="menu.page14">
+            Registrarse
+        </a>
+    </ion-content>
+</ion-view>
