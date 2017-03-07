@@ -16,26 +16,26 @@
         </h4>
         <form class="list" id="page25-form25">
             <div class="perfil">
-                <img src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+                <img src="{{perfil_usuario.url_avatar}}" style="display: block; margin-left: auto; margin-right: auto;">
                 </img>
             </div>
             <h1 id="page25-heading97" style="color:#505151;font-weight:600;text-align:center;">
-                Carolina María Riquelme Vera
+                {{perfil_usuario.nombres}} {{perfil_usuario.ap_paterno}} {{perfil_usuario.ap_materno}}
             </h1>
             <h3 id="page25-heading98" style="color:#555353;text-align:center;">
-                carolina@gmail.com
+                {{perfil_usuario.email}}
             </h3>
             <h3 id="page25-heading99" style="color:#555353;text-align:center;">
-                Sexo Femenino
+                {{perfil_usuario.sexo}}
             </h3>
             <h3 id="page25-heading100" style="color:#555353;text-align:center;">
-                Nacimiento 22/12/1955
+                {{perfil_usuario.fec_nacimiento}}
             </h3>
             <h3 id="page25-heading101" style="color:#555353;text-align:center;">
-                13.653.876-3
+                {{perfil_usuario.nro_documento_identif}}
             </h3>
             <h3 id="page25-heading102" style="color:#555353;text-align:center;">
-                Chile- Valparaíso
+                {{perfil_usuario.idPais}} {{perfil_usuario.idRegion}}
             </h3>
             <a class="button button-assertive boton" id="page25-button51" ui-sref="menu.page16">
                 Editar Datos

@@ -88,8 +88,27 @@
     app.controller('page15Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService) {
-        $scope.np_usuario = localStorageService.get('np_usuario');
+    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http) {
+        //$scope.np_usuario = localStorageService.get('np_usuario');
+        //alert(localStorageService.get("np_usuario").id);
+        $http.post("http://localhost/proyNP/apiNP/np_usuario/usuario", {
+            //'id': localStorageService.get("np_usuario").id
+            'id': 3
+        }).then(function(res) {
+            var estado = res.data.estado;
+            if (estado == 1) {
+                console.log(res.data.usuario);
+                $scope.perfil_usuario = res.data.usuario;
+            } else {
+                $ionicLoading.hide(); //Termina de mostrar el "Cargando"
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Oops',
+                    template: 'Usuario no encontrado, por favor vuelve a logearte'
+                });
+            }
+        });
+        //$scope.usuario = {};
+        //$scope.usuario.nombre = "TABAI PURO WEANDO";
     })
     app.controller('page26Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
