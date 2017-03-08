@@ -28,7 +28,6 @@ class np_pais
         } else if ($peticion[0] == 'showPaises') {
             return self::obtenerPaises();
         }
-
     }
 
     private function obtenerPais()
