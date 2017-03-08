@@ -68,6 +68,7 @@ if ($recurso == 'np_usuario') {
         case 'post':
             $vista->imprimir(np_usuario::post($peticion));
         case 'put':
+            $vista->imprimir(np_usuario::put($peticion));
         case 'delete':
         default:
             // Método no aceptado
