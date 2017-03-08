@@ -81,6 +81,7 @@ if ($recurso == 'np_usuario') {
 } else if ($recurso == 'np_pais') {
     switch ($metodo) {
         case 'get':
+            $vista->imprimir(np_pais::get($peticion));
         case 'post':
             $vista->imprimir(np_pais::post($peticion));
         case 'put':
@@ -97,6 +98,7 @@ if ($recurso == 'np_usuario') {
 }else if ($recurso == 'np_region') {
     switch ($metodo) {
         case 'get':
+            $vista->imprimir(np_region::get($peticion));
         case 'post':
             $vista->imprimir(np_region::post($peticion));
         case 'put':
