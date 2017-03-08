@@ -31,6 +31,14 @@ class np_pais
 
     }
 
+    public static function get($peticion)
+    {
+
+        if ($peticion[0] == 'showPaises') {
+            return self::ObtenerPaises();
+        }
+    }
+
     private function obtenerPais()
     {
         $respuesta = array();
@@ -107,14 +115,6 @@ class np_pais
 
         } catch (Exception $e) {
 
-        }
-    }
-
-    public static function get($peticion)
-    {
-
-        if ($peticion[0] == 'showPaises') {
-            return self::ObtenerPaises();
         }
     }
 

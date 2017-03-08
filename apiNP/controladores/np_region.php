@@ -110,5 +110,4 @@ class np_region
 
         }
     }
-
 }
