@@ -28,14 +28,12 @@ class np_usuario
     const DIRECCION     = "direccion";
     const FONO          = "fono";
 
-    const ESTADO_CREACION_EXITOSA       = 1;
-    const ESTADO_CREACION_FALLIDA       = 2;
-    const ESTADO_ERROR_BD               = 3;
-    const ESTADO_AUSENCIA_CLAVE_API     = 4;
-    const ESTADO_CLAVE_NO_AUTORIZADA    = 5;
-    const ESTADO_URL_INCORRECTA         = 6;
-    const ESTADO_FALLA_DESCONOCIDA      = 7;
-    const ESTADO_PARAMETROS_INCORRECTOS = 8;
+    const CODIGO_EXITO            = 1;
+    const ESTADO_EXITO            = 1;
+    const ESTADO_ERROR            = 2;
+    const ESTADO_ERROR_BD         = 3;
+    const ESTADO_ERROR_PARAMETROS = 4;
+    const ESTADO_NO_ENCONTRADO    = 5;
 
     //Para hacer  algun dato o bien realizar el login
 
@@ -53,6 +51,101 @@ class np_usuario
             throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
         }
     }
+
+
+    public static function put($peticion)
+    {
+
+        if ($peticion[0] == 'actualizarUsuario') {
+
+            $body         = file_get_contents('php://input');
+            $datosUsuario = json_decode($body);
+
+            if (self::actualizar($datosUsuario)) {
+                http_response_code(200);
+                return [
+                    "estado"  => self::CODIGO_EXITO,
+                    "mensaje" => "Registro actualizado correctamente"
+                ];
+            } else {
+                throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
+                    "El contacto al que intentas acceder no existe", 404);
+            }
+
+            
+        } else {
+            throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
+        }
+    }
+
+
+    private function actualizar($datosUsuario)
+    {
+
+
+        try {
+            // Creando consulta UPDATE
+            $consulta = "UPDATE " . self::NOMBRE_TABLA .
+            " SET " . 
+            //self::URLAVATAR . "=?," .
+            //self::EMAIL . "=:email" . "," .
+            self::NOMBRES . "=:nombres " . "," .
+            self::APPATERNO . "=:ap_paterno" . "," .
+            self::APMATERNO. "=:ap_materno" . "," .
+            self::SEXO . "=:sexo" . "," .
+            //self::FECNACIMIENTO . "=:fec_nacimiento" . "," .
+            self::NRODOCUMENTO . "=:nro_documento_identif" .
+            //self::IDPAIS. "=?," .
+            //self::IDREGION . "=? " .
+            //self::CLAVE . "=? " .
+            " WHERE " . self::ID . "=:id";
+
+            // Preparar la sentencia
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
+
+           // $sentencia->bindParam(1, $url_avatar);
+            $sentencia->bindParam("id", $id);
+            //$sentencia->bindParam("email", $email);
+            $sentencia->bindParam("nombres", $nombres);
+            $sentencia->bindParam("ap_paterno", $ap_paterno);
+            $sentencia->bindParam("ap_materno", $ap_materno);
+            $sentencia->bindParam("sexo", $sexo);
+            //$sentencia->bindParam("fec_nacimiento", $fec_nacimiento);
+            $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
+           // $sentencia->bindParam(9, $idPais);
+           // $sentencia->bindParam(10, $idRegion);
+           // $sentencia->bindParam(11, $clave);
+
+            echo $datosUsuario->id;
+
+         //   $url_avatar            = $datosUsuario->url_avatar;
+            $id                    = $datosUsuario->id;
+            //$email                 = $datosUsuario->email;
+            $nombres               = $datosUsuario->nombres;
+            $ap_paterno            = $datosUsuario->ap_paterno;
+            $ap_materno            = $datosUsuario->ap_materno;
+            $sexo                  = $datosUsuario->sexo;
+            //$fec_nacimiento        = $datosUsuario->fec_nacimiento;
+            $nro_documento_identif = $datosUsuario->nro_documento_identif;
+        //    $idPais                = $datosUsuario->idPais
+        //    $idRegion              = $datosUsuario->idRegion
+        //    $clave                 = $datosUsuario->clave
+
+            // Ejecutar la sentencia
+            $sentencia->execute();
+
+            return $sentencia->rowCount();
+
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
+        }
+    }
+
+
+
+
+
+
 
     //Crea un nuevo usuario en la base de datos
 
