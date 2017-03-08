@@ -16,7 +16,7 @@
         </h4>
         <form class="list" id="page16-form16">
             <label class="item item-input inp2" id="page16-input37">
-                <input placeholder="Subir Foto" type="text">
+                <input disabled="" placeholder="Subir Foto" type="text">
                 </input>
             </label>
             <div class="add">
@@ -24,45 +24,37 @@
                 </img>
             </div>
             <label class="item item-input inp" id="page16-input38">
-                <input placeholder="Correo" type="text">
+                <input ng-model="datosUsuario.email" placeholder="Correo" type="text">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input39">
-                <input placeholder="Nombres" type="text">
+                <input ng-model="datosUsuario.nombres" placeholder="Nombres" type="text">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input40">
-                <input placeholder="Apellido Paterno" type="text">
+                <input ng-model="datosUsuario.ap_paterno" placeholder="Apellido Paterno" type="text">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input41">
-                <input placeholder="Apellido Materno" type="text">
+                <input ng-model="datosUsuario.ap_materno" placeholder="Apellido Materno" type="text">
                 </input>
             </label>
             <label class="item item-select inp" id="page16-select20">
                 <span class="input-label">
                     Sexo
                 </span>
-                <select>
-                    <option>
-                    </option>
-                    <option>
-                        Femenino
-                    </option>
-                    <option>
-                        Maculino
-                    </option>
+                <select ng-model="datosUsuario.sexo" ng-options="sexo.nombre for sexo in sexos">
                 </select>
             </label>
             <h1 id="page16-heading61" style="color:#000000;text-align:center;">
                 Fecha de Nacimiento
             </h1>
             <label class="item item-input inp3" id="page16-input42">
-                <input placeholder="" type="date">
+                <input ng-model="datosUsuario.fec_nacimiento" placeholder="" type="date">
                 </input>
             </label>
             <label class="item item-input inp2" id="page16-input43">
-                <input placeholder="Documento de Identificación" type="text">
+                <input ng-model="datosUsuario.nro_documento_identif" placeholder="Documento de Identificación" type="text">
                 </input>
             </label>
             <div class="info">

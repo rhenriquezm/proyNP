@@ -69,6 +69,24 @@
     })
     app.controller('page16Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        $scope.sexos = [{
+            "id": "M",
+            "nombre": "Masculino"
+        }, {
+            "id": "F",
+            "nombre": "Femenino"
+        }];
+        console.log($scope.sexos);
+        var datosUsuario = localStorageService.get('nuevoUsuario');
+        if (datosUsuario.sexo == 'M') {
+            datosUsuario.sexo = $scope.sexos[0];
+        } else {
+            datosUsuario.sexo = $scope.sexos[1];
+        }
+        console.log(datosUsuario);
+        datosUsuario.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
+        $scope.datosUsuario = datosUsuario;
+        //alert($scope.datosUsuario.email);
     })
     app.controller('page18Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
@@ -88,16 +106,16 @@
     app.controller('page15Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http) {
+    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup) {
         //$scope.np_usuario = localStorageService.get('np_usuario');
         //alert(localStorageService.get("np_usuario").id);
         $http.post("http://localhost/proyNP/apiNP/np_usuario/usuario", {
-            //'id': localStorageService.get("np_usuario").id
-            'id': 3
+            'id': localStorageService.get("np_usuario").id
         }).then(function(res) {
             var estado = res.data.estado;
             if (estado == 1) {
                 console.log(res.data.usuario);
+                localStorageService.set('nuevoUsuario', res.data.usuario);
                 $scope.perfil_usuario = res.data.usuario;
             } else {
                 $ionicLoading.hide(); //Termina de mostrar el "Cargando"

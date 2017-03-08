@@ -266,4 +266,29 @@ class contactos
             throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
         }
     }
+
+    public static function put($peticion)
+    {
+
+        if ($peticion[0] == 'actualizarUsuario') {
+
+            $body         = file_get_contents('php://input');
+            $datosUsuario = json_decode($body);
+
+            if (self::actualizar($datosUsuario)) {
+                http_response_code(200);
+                return [
+                    "estado"  => self::CODIGO_EXITO,
+                    "mensaje" => "Registro actualizado correctamente",
+                ];
+            } else if {
+                throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
+                    "El contacto al que intentas acceder no existe", 404);
+            }
+
+        } else {
+            throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
+        }
+    }
+
 }

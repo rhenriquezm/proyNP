@@ -194,6 +194,7 @@ class np_usuario
         if ($usuarioBD != null) {
             http_response_code(200);
 
+            $respuesta["email"]                 = $usuarioBD["email"];
             $respuesta["nombres"]               = $usuarioBD["nombres"];
             $respuesta["ap_paterno"]            = $usuarioBD["ap_paterno"];
             $respuesta["ap_materno"]            = $usuarioBD["ap_materno"];
