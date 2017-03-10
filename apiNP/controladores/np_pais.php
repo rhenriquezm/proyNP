@@ -38,7 +38,6 @@ class np_pais
 
     public static function get($peticion)
     {
-
         if ($peticion[0] == 'showPaises') {
             return self::ObtenerPaises();
         }
@@ -96,7 +95,6 @@ class np_pais
 
     public function obtenerNombrePaisID($id)
     {
-
         $comando = "SELECT " .
         self::NOMBRE .
         " FROM " .
@@ -142,7 +140,6 @@ class np_pais
 
     private function obtenerPaisesBD()
     {
-
         $comando = "SELECT " .
         self::ID . "," .
         self::NOMBRE .

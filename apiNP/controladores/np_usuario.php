@@ -51,7 +51,6 @@ class np_usuario
     public static function post($peticion)
     {
         // HTTP - Metodos Rest (post, get, put, delete)
-
         if ($peticion[0] == 'registro') { // La peticion extraida desde la url
             return self::registrar(); // Se devuelve el resultado de la
         } else if ($peticion[0] == 'login') { //
@@ -191,7 +190,6 @@ class np_usuario
         } catch (PDOException $e) {
             throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
         }
-
     }
 
     /**
@@ -206,7 +204,6 @@ class np_usuario
         } else {
             return null;
         }
-
     }
 
     private function generarClaveApi()
@@ -278,7 +275,6 @@ class np_usuario
             throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
                 "Ha ocurrido un error");
         }
-
     }
 
     private function obtenerUsuarioPorId($id)
@@ -318,7 +314,6 @@ class np_usuario
 
     private function autenticar($email, $clave)
     {
-
         $comando = "SELECT " . self::CLAVE .
         " FROM " . self::NOMBRE_TABLA .
         " WHERE " . self::EMAIL . " =:email";
@@ -373,7 +368,6 @@ class np_usuario
         } else {
             return null;
         }
-
     }
 
     /**
@@ -444,6 +438,5 @@ class np_usuario
         } else {
             return null;
         }
-
     }
 }

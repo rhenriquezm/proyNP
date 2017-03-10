@@ -69,7 +69,6 @@ class np_region
 
     private function obtenerRegionID($id)
     {
-
         $comando = "SELECT " .
         self::NOMBRE .
         " FROM " .
@@ -97,7 +96,6 @@ class np_region
 
     public function obtenerNombreRegionID($id)
     {
-
         $comando = "SELECT " .
         self::NOMBRE .
         " FROM " .
@@ -126,7 +124,6 @@ class np_region
 
     private function ObtenerRegiones()
     {
-
         $respuesta  = array();
         $regiones   = array();
         $regionesBD = self::ObtenerRegionesBD();
@@ -144,13 +141,11 @@ class np_region
 
     private function ObtenerRegionesBD()
     {
-
         $comando = "SELECT " .
         self::ID . "," .
         self::NOMBRE .
         " FROM " .
         self::NOMBRE_TABLA;
-
         try {
 
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
@@ -160,14 +155,11 @@ class np_region
             }
 
         } catch (Exception $e) {
-
         }
-
     }
 
     private function obtenerRegionesID()
     {
-
         $respuesta = array();
         $body      = file_get_contents('php://input');
         $region    = json_decode($body);
@@ -184,12 +176,10 @@ class np_region
         } else {
             throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA, "Ha ocurrido un error");
         }
-
     }
 
     private function obtenerRegionesBDID($id)
     {
-
         $comando = "SELECT " .
         self::ID . "," .
         self::NOMBRE .
@@ -209,5 +199,4 @@ class np_region
             return null;
         }
     }
-
 }
