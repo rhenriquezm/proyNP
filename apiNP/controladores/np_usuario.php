@@ -5,6 +5,7 @@ require_once '/../datos/ConexionBD.php';
 class np_usuario
 {
     // Datos de la tabla "np_usuario"
+
     const NOMBRE_TABLA  = "np_usuario";
     const ID            = "id";
     const EMAIL         = "email";
@@ -28,6 +29,8 @@ class np_usuario
     const DIRECCION     = "direccion";
     const FONO          = "fono";
 
+    // Codigos de Estados
+
     const CODIGO_EXITO            = 1;
     const ESTADO_EXITO            = 1;
     const ESTADO_ERROR            = 2;
@@ -35,101 +38,77 @@ class np_usuario
     const ESTADO_ERROR_PARAMETROS = 4;
     const ESTADO_NO_ENCONTRADO    = 5;
 
-    //Para hacer  algun dato o bien realizar el login
+    const ESTADO_CREACION_EXITOSA       = 1;
+    const ESTADO_CREACION_FALLIDA       = 2;
+    const ESTADO_AUSENCIA_CLAVE_API     = 4;
+    const ESTADO_CLAVE_NO_AUTORIZADA    = 5;
+    const ESTADO_URL_INCORRECTA         = 6;
+    const ESTADO_FALLA_DESCONOCIDA      = 7;
+    const ESTADO_PARAMETROS_INCORRECTOS = 8;
 
-    public static function post($peticion) // Peticion extraida a partir de la url
+    // Para hacer  algun dato o bien realizar el login
 
+    public static function post($peticion)
     {
-        if ($peticion[0] == 'registro') { // Si la peticion es igual a registro, se registra un nuevo usuario
-            return self::registrar(); // Se devuelve el resultado de la
-        } else if ($peticion[0] == 'login') {
-            return self::loguear();
-        } else if ($peticion[0] == 'usuario') {
-            return self::obtenerPerfil();
+        // HTTP - Metodos Rest (post, get, put, delete)
 
+        if ($peticion[0] == 'registro') { // La peticion extraida desde la url
+            return self::registrar(); // Se devuelve el resultado de la
+        } else if ($peticion[0] == 'login') { //
+            return self::loguear(); //
+        } else if ($peticion[0] == 'usuario') { //
+            return self::obtenerPerfil(); //
         } else {
             throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
         }
     }
 
-
     public static function put($peticion)
     {
-
         if ($peticion[0] == 'actualizarUsuario') {
-
             $body         = file_get_contents('php://input');
             $datosUsuario = json_decode($body);
-
             if (self::actualizar($datosUsuario)) {
                 http_response_code(200);
-                return [
-                    "estado"  => self::CODIGO_EXITO,
-                    "mensaje" => "Registro actualizado correctamente"
-                ];
+                return ["estado" => self::CODIGO_EXITO, "mensaje" => "Registro actualizado correctamente"];
             } else {
-                throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
-                    "El contacto al que intentas acceder no existe", 404);
+                throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO, "El contacto al que intentas acceder no existe", 404);
             }
 
-            
         } else {
             throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
         }
     }
 
-
     private function actualizar($datosUsuario)
     {
-
-
         try {
             // Creando consulta UPDATE
             $consulta = "UPDATE " . self::NOMBRE_TABLA .
-            " SET " . 
-            //self::URLAVATAR . "=?," .
-            //self::EMAIL . "=:email" . "," .
-            self::NOMBRES . "=:nombres " . "," .
+            " SET " .
+            self::NOMBRES . "=:nombres" . "," .
             self::APPATERNO . "=:ap_paterno" . "," .
-            self::APMATERNO. "=:ap_materno" . "," .
+            self::APMATERNO . "=:ap_materno" . "," .
             self::SEXO . "=:sexo" . "," .
-            //self::FECNACIMIENTO . "=:fec_nacimiento" . "," .
             self::NRODOCUMENTO . "=:nro_documento_identif" .
-            //self::IDPAIS. "=?," .
-            //self::IDREGION . "=? " .
-            //self::CLAVE . "=? " .
             " WHERE " . self::ID . "=:id";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
 
-           // $sentencia->bindParam(1, $url_avatar);
             $sentencia->bindParam("id", $id);
-            //$sentencia->bindParam("email", $email);
             $sentencia->bindParam("nombres", $nombres);
             $sentencia->bindParam("ap_paterno", $ap_paterno);
             $sentencia->bindParam("ap_materno", $ap_materno);
             $sentencia->bindParam("sexo", $sexo);
-            //$sentencia->bindParam("fec_nacimiento", $fec_nacimiento);
             $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
-           // $sentencia->bindParam(9, $idPais);
-           // $sentencia->bindParam(10, $idRegion);
-           // $sentencia->bindParam(11, $clave);
 
-            echo $datosUsuario->id;
-
-         //   $url_avatar            = $datosUsuario->url_avatar;
             $id                    = $datosUsuario->id;
-            //$email                 = $datosUsuario->email;
             $nombres               = $datosUsuario->nombres;
             $ap_paterno            = $datosUsuario->ap_paterno;
             $ap_materno            = $datosUsuario->ap_materno;
             $sexo                  = $datosUsuario->sexo;
-            //$fec_nacimiento        = $datosUsuario->fec_nacimiento;
             $nro_documento_identif = $datosUsuario->nro_documento_identif;
-        //    $idPais                = $datosUsuario->idPais
-        //    $idRegion              = $datosUsuario->idRegion
-        //    $clave                 = $datosUsuario->clave
 
             // Ejecutar la sentencia
             $sentencia->execute();
@@ -140,12 +119,6 @@ class np_usuario
             throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
         }
     }
-
-
-
-
-
-
 
     //Crea un nuevo usuario en la base de datos
 

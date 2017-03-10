@@ -5,6 +5,7 @@ angular.module('app.routes', []).config(function($stateProvider, $urlRouterProvi
     // Each state's controller can be found in controllers.js
     $stateProvider.state('menu.home', {
         url: '/page1',
+        cache: false,
         views: {
             'side-menu21': {
                 templateUrl: 'templates/home.html',
@@ -132,6 +133,7 @@ angular.module('app.routes', []).config(function($stateProvider, $urlRouterProvi
             }
         }
     }).state('menu.page25', {
+        cache: false,
         url: '/miperfil',
         views: {
             'side-menu21': {
