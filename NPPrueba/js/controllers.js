@@ -85,6 +85,33 @@
         } else {
             datosUsuario.sexo = $scope.sexos[1];
         }
+        $scope.JSONPaises = {};
+        $scope.JSONRegiones = {};
+        obtenerPaises();
+        obtenerRegiones(datosUsuario.idPais);
+        // EVENTO QUE GENERA LA DIRECTIVA ng-change
+        $scope.mostrarRegiones = function(selPaises) {
+            // $scope.selPaises NOS TRAE EL VALOR DEL SELECT DE CATEGORIAS
+            obtenerRegiones(selPaises);
+        };
+
+        function obtenerRegiones(idPais) {
+            //console.log(idPais);
+            $http.post('http://localhost/proyNP/apiNP/REG_POR_PAIS/obtenerRegiones', {
+                "id": idPais
+            }).then(function(res) {
+                $scope.JSONRegiones = res.data.regiones;
+            });
+        }
+
+        function obtenerPaises() {
+            $http.get('http://localhost/proyNP/apiNP/REG_POR_PAIS/obtenerPaises').
+            then(function(res) {
+                $scope.JSONPaises = res.data.paises;
+            });
+        }
+        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDAAAA AAAAAAAAA LAAAAAAAAAAAAAAAAAAR
+        /*
         $scope.paises = {};
         $http.get("http://localhost/proyNP/apiNP/np_pais/showPaises").then(function(res) {
             $scope.paises = res.data.paises;
@@ -104,6 +131,7 @@
                 }
             }
         });
+        */
         datosUsuario.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
         $scope.datosUsuario = datosUsuario;
         //alert($scope.datosUsuario.email);
@@ -115,6 +143,9 @@
             loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
             loginFactory.data.sexo = $scope.datosUsuario.sexo.id;
             loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
+            loginFactory.data.idPais = $scope.datosUsuario.idPais;
+            loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
+            alert($scope.datosUsuario.idPais);
             $state.go("menu.page15");
         }
     })
@@ -133,10 +164,10 @@
     app.controller('page10Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page15Ctrl', function($scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location) {
+    app.controller('page15Ctrl', function($scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         var usuarioModificado = loginFactory.data;
-        console.log(loginFactory.data)
+        console.log(usuarioModificado.idPais);
         $ionicLoading.show({ //Comienzo del "Cargando"
             template: 'Cargando...'
         });
@@ -146,7 +177,9 @@
             'ap_paterno': usuarioModificado.ap_paterno,
             'ap_materno': usuarioModificado.ap_materno,
             'sexo': usuarioModificado.sexo,
-            'nro_documento_identif': usuarioModificado.nro_documento_identif
+            'nro_documento_identif': usuarioModificado.nro_documento_identif,
+            'idPais': usuarioModificado.idPais,
+            'idRegion': usuarioModificado.idRegion
         }).then(function(res) {
             var estado = res.data.estado;
             console.log(estado);
@@ -159,7 +192,7 @@
                 $ionicLoading.hide(); //Termina de mostrar el "Cargando"
                 var alertPopup = $ionicPopup.alert({
                     title: 'Oops',
-                    template: 'Usuario o clave incorrecto'
+                    template: 'No se pudo guardar'
                 });
             }
         });
@@ -178,7 +211,6 @@
                 console.log(res.data.usuario);
                 localStorageService.set('nuevoUsuario', res.data.usuario);
                 $scope.perfil_usuario = res.data.usuario;
-                alert($scope.perfil_usuario.sexo);
             } else {
                 $ionicLoading.hide(); //Termina de mostrar el "Cargando"
                 var alertPopup = $ionicPopup.alert({

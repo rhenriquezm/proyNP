@@ -24,7 +24,7 @@
                 </img>
             </div>
             <label class="item item-input inp" id="page16-input38">
-                <input ng-model="datosUsuario.email" placeholder="Correo" type="text">
+                <input disabled="true" ng-model="datosUsuario.email" placeholder="Correo" type="text">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input39">
@@ -65,6 +65,21 @@
                 <span class="input-label">
                     Pais
                 </span>
+                <select class="form-group" id="pais" ng-change="mostrarRegiones(datosUsuario.idPais)" ng-model="datosUsuario.idPais" ng-options="paises.id as paises.nombre for paises in JSONPaises">
+                </select>
+            </label>
+            <label class="item item-select inp" id="page16-select22">
+                <span class="input-label">
+                    Region
+                </span>
+                <select class="form-group" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" ng-valid="!pais">
+                </select>
+            </label>
+            <!--
+            <label class="item item-select inp" id="page16-select21">
+                <span class="input-label">
+                    Pais
+                </span>
                 <select ng-model="datosUsuario.pais" ng-options="pais.nombre for pais in paises" ngmodelchange="cambiajo()">
                 </select>
             </label>
@@ -75,6 +90,7 @@
                 <select ng-model="datosUsuario.region" ng-options="region.nombre for region in regiones" ngmodelchange="cambiajo()">
                 </select>
             </label>
+            -->
             <label class="item item-input inp" id="page16-input44">
                 <input placeholder="Contraseña" type="password">
                 </input>

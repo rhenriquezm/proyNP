@@ -5,6 +5,7 @@
 require 'controladores/np_usuario.php';
 require 'controladores/np_pais.php';
 require 'controladores/np_region.php';
+require 'controladores/REG_POR_PAIS.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExcepcionApi.php';
@@ -50,7 +51,7 @@ if (isset($_GET['PATH_INFO'])) {
 
 // Obtener recurso
 $recurso             = array_shift($peticion);
-$recursos_existentes = array('contactos', 'usuarios', 'np_usuario', 'np_pais', 'np_region');
+$recursos_existentes = array('contactos', 'usuarios', 'np_usuario', 'np_pais', 'np_region', 'REG_POR_PAIS');
 
 // Comprobar si existe el recurso
 if (!in_array($recurso, $recursos_existentes)) {
@@ -96,12 +97,30 @@ if ($recurso == 'np_usuario') {
             ];
             $vista->imprimir($cuerpo);
     }
-}else if ($recurso == 'np_region') {
+} else if ($recurso == 'np_region') {
     switch ($metodo) {
         case 'get':
             $vista->imprimir(np_region::get($peticion));
         case 'post':
             $vista->imprimir(np_region::post($peticion));
+        case 'put':
+        case 'delete':
+        default:
+            // Método no aceptado
+            $vista->estado = 405;
+            $cuerpo        = [
+                "estado"  => ESTADO_METODO_NO_PERMITIDO,
+                "mensaje" => utf8_encode("Método no permitido"),
+            ];
+            $vista->imprimir($cuerpo);
+    }
+} else if ($recurso == 'REG_POR_PAIS') {
+    switch ($metodo) {
+        case 'get':
+            $vista->imprimir(REG_POR_PAIS::get($peticion));
+
+        case 'post':
+            $vista->imprimir(REG_POR_PAIS::post($peticion));
         case 'put':
         case 'delete':
         default:

@@ -89,7 +89,9 @@ class np_usuario
             self::APPATERNO . "=:ap_paterno" . "," .
             self::APMATERNO . "=:ap_materno" . "," .
             self::SEXO . "=:sexo" . "," .
-            self::NRODOCUMENTO . "=:nro_documento_identif" .
+            self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
+            self::IDPAIS . "=:idPais" . "," .
+            self::IDREGION . "=:idRegion" .
             " WHERE " . self::ID . "=:id";
 
             // Preparar la sentencia
@@ -101,6 +103,8 @@ class np_usuario
             $sentencia->bindParam("ap_materno", $ap_materno);
             $sentencia->bindParam("sexo", $sexo);
             $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
+            $sentencia->bindParam("idPais", $idPais);
+            $sentencia->bindParam("idRegion", $idRegion);
 
             $id                    = $datosUsuario->id;
             $nombres               = $datosUsuario->nombres;
@@ -108,6 +112,8 @@ class np_usuario
             $ap_materno            = $datosUsuario->ap_materno;
             $sexo                  = $datosUsuario->sexo;
             $nro_documento_identif = $datosUsuario->nro_documento_identif;
+            $idPais                = $datosUsuario->idPais;
+            $idRegion              = $datosUsuario->idRegion;
 
             // Ejecutar la sentencia
             $sentencia->execute();
