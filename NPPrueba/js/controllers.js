@@ -69,7 +69,7 @@
     app.controller('page14Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page16Ctrl', function($scope, $stateParams, localStorageService, $state, loginFactory) {
+    app.controller('page16Ctrl', function($scope, $stateParams, localStorageService, $state, loginFactory, $http) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         $scope.sexos = [{
             "id": "M",
@@ -85,7 +85,25 @@
         } else {
             datosUsuario.sexo = $scope.sexos[1];
         }
-        console.log(datosUsuario);
+        $scope.paises = {};
+        $http.get("http://localhost/proyNP/apiNP/np_pais/showPaises").then(function(res) {
+            $scope.paises = res.data.paises;
+            for (var i = 0; i < Object.keys($scope.paises).length; i++) {
+                if ($scope.paises[i].id == datosUsuario.idPais) {
+                    datosUsuario.pais = $scope.paises[i];
+                }
+            }
+        });
+        $scope.regiones = {};
+        $http.get("http://localhost/proyNP/apiNP/np_region/showRegiones").then(function(res) {
+            console.log(res.data.paises);
+            $scope.regiones = res.data.paises;
+            for (var i = 0; i < Object.keys($scope.regiones).length; i++) {
+                if ($scope.regiones[i].id == datosUsuario.idRegion) {
+                    datosUsuario.region = $scope.regiones[i];
+                }
+            }
+        });
         datosUsuario.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
         $scope.datosUsuario = datosUsuario;
         //alert($scope.datosUsuario.email);

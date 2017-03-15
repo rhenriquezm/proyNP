@@ -63,16 +63,16 @@
             </div>
             <label class="item item-select inp" id="page16-select21">
                 <span class="input-label">
-                    País
+                    Pais
                 </span>
-                <select>
+                <select ng-model="datosUsuario.pais" ng-options="pais.nombre for pais in paises" ngmodelchange="cambiajo()">
                 </select>
             </label>
             <label class="item item-select inp" id="page16-select22">
                 <span class="input-label">
-                    Región
+                    Region
                 </span>
-                <select>
+                <select ng-model="datosUsuario.region" ng-options="region.nombre for region in regiones" ngmodelchange="cambiajo()">
                 </select>
             </label>
             <label class="item item-input inp" id="page16-input44">
