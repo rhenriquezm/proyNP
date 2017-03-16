@@ -133,7 +133,6 @@ angular.module('app.routes', []).config(function($stateProvider, $urlRouterProvi
             }
         }
     }).state('menu.page25', {
-        cache: false,
         url: '/miperfil',
         views: {
             'side-menu21': {

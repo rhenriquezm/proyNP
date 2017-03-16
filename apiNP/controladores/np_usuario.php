@@ -82,7 +82,7 @@ class np_usuario
     private function actualizar($datosUsuario)
     {
         try {
-            // Creando consulta UPDATE
+
             $consulta = "UPDATE " . self::NOMBRE_TABLA .
             " SET " .
             self::NOMBRES . "=:nombres" . "," .
@@ -91,7 +91,8 @@ class np_usuario
             self::SEXO . "=:sexo" . "," .
             self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
             self::IDPAIS . "=:idPais" . "," .
-            self::IDREGION . "=:idRegion" .
+            self::IDREGION . "=:idRegion" . "," .
+            self::CLAVE . "=:clave" .
             " WHERE " . self::ID . "=:id";
 
             // Preparar la sentencia
@@ -105,6 +106,7 @@ class np_usuario
             $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
             $sentencia->bindParam("idPais", $idPais);
             $sentencia->bindParam("idRegion", $idRegion);
+            $sentencia->bindParam("clave", $clave);
 
             $id                    = $datosUsuario->id;
             $nombres               = $datosUsuario->nombres;
@@ -114,8 +116,8 @@ class np_usuario
             $nro_documento_identif = $datosUsuario->nro_documento_identif;
             $idPais                = $datosUsuario->idPais;
             $idRegion              = $datosUsuario->idRegion;
+            $clave                 = md5($datosUsuario->clave);
 
-            // Ejecutar la sentencia
             $sentencia->execute();
 
             return $sentencia->rowCount();
@@ -125,9 +127,9 @@ class np_usuario
         }
     }
 
-    //Crea un nuevo usuario en la base de datos
+//Crea un nuevo usuario en la base de datos
 
-    private function registrar()
+    public function registrar()
     {
         $cuerpo  = file_get_contents('php://input');
         $usuario = json_decode($cuerpo);
@@ -151,12 +153,12 @@ class np_usuario
         }
     }
 
-    /**
-     * Crea un nuevo usuario en la tabla "usuario"
-     * @param mixed $datosUsuario columnas del registro
-     * @return int codigo para determinar si la inserción fue exitosa
-     */
-    private function crear($datosUsuario)
+/**
+ * Crea un nuevo usuario en la tabla "usuario"
+ * @param mixed $datosUsuario columnas del registro
+ * @return int codigo para determinar si la inserción fue exitosa
+ */
+    public function crear($datosUsuario)
     {
         $nombre = $datosUsuario->nombre;
 
@@ -198,12 +200,12 @@ class np_usuario
         }
     }
 
-    /**
-     * Protege la contraseña con un algoritmo de encriptado
-     * @param $contrasenaPlana
-     * @return bool|null|string
-     */
-    private function encriptarContrasena($contrasenaPlana)
+/**
+ * Protege la contraseña con un algoritmo de encriptado
+ * @param $contrasenaPlana
+ * @return bool|null|string
+ */
+    public function encriptarContrasena($contrasenaPlana)
     {
         if ($contrasenaPlana) {
             return md5($contrasenaPlana);
@@ -212,12 +214,12 @@ class np_usuario
         }
     }
 
-    private function generarClaveApi()
+    public function generarClaveApi()
     {
         return md5(microtime() . rand());
     }
 
-    private function loguear()
+    public function loguear()
     {
         $respuesta = array();
 
@@ -248,7 +250,7 @@ class np_usuario
         }
     }
 
-    private function obtenerPerfil()
+    public function obtenerPerfil()
     {
         $respuesta = array();
 
@@ -275,6 +277,7 @@ class np_usuario
             $respuesta["idPais"]                = $usuarioBD["idPais"];
             $respuesta["nombrePais"]            = np_pais::obtenerNombrePaisID($usuarioBD["idPais"]);
             $respuesta["url_avatar"]            = $usuarioBD["url_avatar"];
+            $respuesta["clave"]                 = $usuarioBD["clave"];
 
             return ["estado" => 1, "usuario" => $respuesta];
         } else {
@@ -283,7 +286,7 @@ class np_usuario
         }
     }
 
-    private function obtenerUsuarioPorId($id)
+    public function obtenerUsuarioPorId($id)
     {
         $comando = "SELECT " .
 
@@ -297,6 +300,7 @@ class np_usuario
         self::NRODOCUMENTO . "," .
         self::IDPAIS . "," .
         self::IDREGION . "," .
+        self::CLAVE . "," .
         self::URLAVATAR .
         " FROM " . self::NOMBRE_TABLA .
         " WHERE " . self::ID . " =:id";
@@ -318,7 +322,7 @@ class np_usuario
 
     }
 
-    private function autenticar($email, $clave)
+    public function autenticar($email, $clave)
     {
         $comando = "SELECT " . self::CLAVE .
         " FROM " . self::NOMBRE_TABLA .
@@ -351,12 +355,12 @@ class np_usuario
 
     }
 
-    private function validarContrasena($contrasenaPlana, $contrasenaHash)
+    public function validarContrasena($contrasenaPlana, $contrasenaHash)
     {
         return md5($contrasenaPlana) == $contrasenaHash;
     }
 
-    private function obtenerUsuarioPorCorreo($email)
+    public function obtenerUsuarioPorCorreo($email)
     {
         $comando = "SELECT " .
         self::ID . "," .
@@ -376,12 +380,12 @@ class np_usuario
         }
     }
 
-    /**
-     * Otorga los permisos a un usuario para que acceda a los recursos
-     * @return null o el id del usuario autorizado
-     * @throws Exception
-     */
-    public static function autorizar()
+/**
+ * Otorga los permisos a un usuario para que acceda a los recursos
+ * @return null o el id del usuario autorizado
+ * @throws Exception
+ */
+    public function autorizar()
     {
         $cabeceras = apache_request_headers();
 
@@ -403,12 +407,12 @@ class np_usuario
         }
     }
 
-    /**
-     * Comprueba la existencia de la clave para la api
-     * @param $claveApi
-     * @return bool true si existe o false en caso contrario
-     */
-    private function validarClaveApi($claveApi)
+/**
+ * Comprueba la existencia de la clave para la api
+ * @param $claveApi
+ * @return bool true si existe o false en caso contrario
+ */
+    public function validarClaveApi($claveApi)
     {
         $comando = "SELECT COUNT(" . self::ID_USUARIO . ")" .
         " FROM " . self::NOMBRE_TABLA .
@@ -423,12 +427,12 @@ class np_usuario
         return $sentencia->fetchColumn(0) > 0;
     }
 
-    /**
-     * Obtiene el valor de la columna "idUsuario" basado en la clave de api
-     * @param $claveApi
-     * @return null si este no fue encontrado
-     */
-    private function obtenerIdUsuario($claveApi)
+/**
+ * Obtiene el valor de la columna "idUsuario" basado en la clave de api
+ * @param $claveApi
+ * @return null si este no fue encontrado
+ */
+    public function obtenerIdUsuario($claveApi)
     {
         $comando = "SELECT " . self::ID_USUARIO .
         " FROM " . self::NOMBRE_TABLA .

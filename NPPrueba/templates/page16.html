@@ -75,29 +75,17 @@
                 <select class="form-group" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" ng-valid="!pais">
                 </select>
             </label>
-            <!--
-            <label class="item item-select inp" id="page16-select21">
-                <span class="input-label">
-                    Pais
-                </span>
-                <select ng-model="datosUsuario.pais" ng-options="pais.nombre for pais in paises" ngmodelchange="cambiajo()">
-                </select>
-            </label>
-            <label class="item item-select inp" id="page16-select22">
-                <span class="input-label">
-                    Region
-                </span>
-                <select ng-model="datosUsuario.region" ng-options="region.nombre for region in regiones" ngmodelchange="cambiajo()">
-                </select>
-            </label>
-            -->
+            <!-- CONTRASEÑAS!!! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "-->
             <label class="item item-input inp" id="page16-input44">
-                <input placeholder="Contraseña" type="password">
+                <input name="pass1" ng-model="datosUsuario.clave" placeholder="Contraseña" type="password">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input45">
-                <input placeholder="Repetir Contraseña" type="password">
+                <input name="pass2" ng-model="confirm_clave" no-pattern="\b{{pass}}\b" placeholder="Repetir Contraseña" type="password">
                 </input>
+                <div ng-message="pattern">
+                    Contraseñas no coinciden!
+                </div>
             </label>
             <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page15">
                 Cancelar
