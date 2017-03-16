@@ -13,14 +13,12 @@
             $ionicLoading.show({ //Comienzo del "Cargando"
                 template: 'Cargando...'
             });
-            alert($scope.np_usuario.email + " " + $scope.np_usuario.clave);
             if ($scope.np_usuario.email != '' && $scope.np_usuario.clave != '') {
                 $http.post("http://localhost/proyNP/apiNP/np_usuario/login", {
                     'email': $scope.np_usuario.email,
                     'clave': $scope.np_usuario.clave
                 }).then(function(res) {
                     var estado = res.data.estado;
-                    console.log(estado);
                     if (estado == 1) {
                         localStorageService.set("np_usuario", res.data.usuario);
                         //localStorageService.set("apellido", res.data.usuario.ap_paterno);
@@ -79,18 +77,18 @@
             "id": "F",
             "nombre": "Femenino"
         }];
-        var datosUsuario = localStorageService.get('nuevoUsuario');
-        console.log(datosUsuario)
-        if (datosUsuario.sexo == 'M') {
-            datosUsuario.sexo = $scope.sexos[0];
-        } else {
-            datosUsuario.sexo = $scope.sexos[1];
-        }
+        var datosUsuarios = localStorageService.get('nuevoUsuario');
+        var datosHistoricos = localStorageService.get('nuevoUsuario');
+        //if (datosUsuarios.sexo == 'M') {
+        //    datosUsuarios.sexo = $scope.sexos[0];
+        //} else {
+        //   datosUsuarios.sexo = $scope.sexos[1];
+        //}
         //Pais y Region 
         $scope.JSONPaises = {};
         $scope.JSONRegiones = {};
         obtenerPaises();
-        obtenerRegiones(datosUsuario.idPais);
+        obtenerRegiones(datosUsuarios.idPais);
         // EVENTO QUE GENERA LA DIRECTIVA ng-change
         $scope.mostrarRegiones = function(selPaises) {
             // $scope.selPaises NOS TRAE EL VALOR DEL SELECT DE CATEGORIAS
@@ -113,43 +111,58 @@
             });
         }
         //Fecha de Nacimiento
-        datosUsuario.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
-        $scope.datosUsuario = datosUsuario;
-        var passActual = $scope.datosUsuario.clave;
-        $scope.datosUsuario.clave = "";
-        $scope.actualizar = function() {
-            loginFactory.data = {};
-            loginFactory.data.id = localStorageService.get('np_usuario').id;
-            loginFactory.data.nombres = $scope.datosUsuario.nombres;
-            loginFactory.data.ap_paterno = $scope.datosUsuario.ap_paterno;
-            loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
-            loginFactory.data.sexo = $scope.datosUsuario.sexo.id;
-            loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
-            loginFactory.data.idPais = $scope.datosUsuario.idPais;
-            loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
-            if ($scope.datosUsuario.clave == "") {
-                loginFactory.data.clave = passActual;
+        datosUsuarios.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
+        $scope.datosUsuario = datosUsuarios;
+        $scope.datosUsuario.clave = null;
+
+        function compararObj() {
+            if ($scope.datosUsuario.nombres != datosHistoricos.nombres || $scope.datosUsuario.ap_paterno != datosHistoricos.ap_paterno || $scope.datosUsuario.ap_materno != datosHistoricos.ap_materno || ($scope.datosUsuario.fec_nacimiento - datosHistoricos.fec_nacimiento) != 0 || $scope.datosUsuario.idPais != datosHistoricos.idPais || $scope.datosUsuario.idRegion != datosHistoricos.idRegion || $scope.datosUsuario.nro_documento_identif != datosHistoricos.nro_documento_identif || $scope.datosUsuario.sexo != datosHistoricos.sexo) {
+                return true;
             } else {
-                loginFactory.data.clave = $scope.datosUsuario.clave;
+                return false;
             }
-            $ionicHistory.clearCache().then(function() {
-                $state.go("menu.page15");
-            });
         }
-    }) app.controller('page18Ctrl', function($scope, $stateParams, localStorageService) {
+        $scope.actualizar = function() {
+            datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
+            console.log(datosHistoricos);
+            console.log($scope.datosUsuario);
+            if (compararObj()) {
+                loginFactory.data = {};
+                loginFactory.data.id = localStorageService.get('np_usuario').id;
+                loginFactory.data.nombres = $scope.datosUsuario.nombres;
+                loginFactory.data.ap_paterno = $scope.datosUsuario.ap_paterno;
+                loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
+                loginFactory.data.sexo = $scope.datosUsuario.sexo;
+                loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
+                loginFactory.data.idPais = $scope.datosUsuario.idPais;
+                loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
+                loginFactory.data.clave = $scope.datosUsuario.clave;
+                $ionicHistory.clearCache().then(function() {
+                    $state.go("menu.page15");
+                });
+            } else {
+                alert("NO CAMBIASTE NADA");
+            }
+        }
+    })
+    app.controller('page18Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page19Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page19Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page20Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page20Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page9Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page9Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page10Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page10Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page15Ctrl', function($scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
+    })
+    app.controller('page15Ctrl', function($scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         var usuarioModificado = loginFactory.data;
-        alert("MENSAJE: " + usuarioModificado.id);
         $http.put("http://localhost/proyNP/apiNP/np_usuario/actualizarUsuario", {
             'id': usuarioModificado.id,
             'nombres': usuarioModificado.nombres,
@@ -162,7 +175,6 @@
             'clave': usuarioModificado.clave
         }).then(function(res) {
             var estado = res.data.estado;
-            alert(estado);
             if (estado == 1) {
                 //localStorageService.set("apellido", res.data.usuario.ap_paterno);
                 //loginFactory.data.nombres = localStorageService.get('nombre');
@@ -174,7 +186,8 @@
                 });
             }
         });
-    }) app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location) {
+    })
+    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location) {
         //$scope.np_usuario = localStorageService.get('np_usuario');
         //alert(localStorageService.get("np_usuario").id);
         $scope.perfil_usuario = {};
@@ -185,7 +198,6 @@
         }).then(function(res) {
             var estado = res.data.estado;
             if (estado == 1) {
-                console.log(res.data.usuario);
                 localStorageService.set('nuevoUsuario', res.data.usuario);
                 $scope.perfil_usuario = res.data.usuario;
             } else {
@@ -198,25 +210,32 @@
         });
         //$scope.usuario = {};
         //$scope.usuario.nombre = "TABAI PURO WEANDO";
-    }) app.controller('page26Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page26Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page27Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page27Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page17Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page17Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page11Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page11Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page13Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page13Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('page12Ctrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('page12Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-    }) app.controller('menuCtrl', function($scope, $stateParams, localStorageService) {
+    })
+    app.controller('menuCtrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         $scope.logout = function() {
             localStorageService.clearAll();
-            alert(localStorageService.get('np_usuario'));
         }
-    }) app.filter('capitalize', function() {
+    })
+    app.filter('capitalize', function() {
         return function(input) {
             return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
         }

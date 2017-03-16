@@ -43,7 +43,7 @@
                 <span class="input-label">
                     Sexo
                 </span>
-                <select ng-model="datosUsuario.sexo" ng-options="sexo.nombre for sexo in sexos">
+                <select ng-model="datosUsuario.sexo" ng-options="sexo.id as sexo.nombre for sexo in sexos">
                 </select>
             </label>
             <h1 id="page16-heading61" style="color:#000000;text-align:center;">
@@ -77,15 +77,12 @@
             </label>
             <!-- CONTRASEÑAS!!! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "-->
             <label class="item item-input inp" id="page16-input44">
-                <input name="pass1" ng-model="datosUsuario.clave" placeholder="Contraseña" type="password">
+                <input ng-model="datosUsuario.clave" placeholder="Contraseña" type="password">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input45">
-                <input name="pass2" ng-model="confirm_clave" no-pattern="\b{{pass}}\b" placeholder="Repetir Contraseña" type="password">
+                <input ng-model="confirm_clave" placeholder="Repetir Contraseña" type="password">
                 </input>
-                <div ng-message="pattern">
-                    Contraseñas no coinciden!
-                </div>
             </label>
             <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page15">
                 Cancelar
