@@ -32,17 +32,19 @@
                     <input placeholder="Buscar Biografía" type="search">
                     </input>
                 </label>
-                <ion-item class="item-icon-right positive menu" id="menu-list-item4" menu-close="" ui-sref="menu.page25">
+                <ion-item class="item-icon-right positive menu" id="menu-list-item4" menu-close="" ng-click="editarReg()">
                     Mi Perfil
                     <i class="icon ion-android-person icon-accessory">
                     </i>
+                    <ion-option-button class="button-positive">
+                    </ion-option-button>
                 </ion-item>
                 <ion-item class="item-icon-right positive menu" id="menu-list-item5" menu-close="" ui-sref="menu.page23">
                     Buscar Servicio
                     <i class="icon ion-android-hand icon-accessory">
                     </i>
                 </ion-item>
-                <ion-item class="item-icon-right positive menu" id="menu-list-item6" menu-close="" ng-click="logout()" ui-sref="menu.home">
+                <ion-item class="item-icon-right positive menu" id="menu-list-item6" menu-close="" ng-click="logout()">
                     Cerrar Sesión
                     <i class="icon ion-android-close icon-accessory">
                     </i>

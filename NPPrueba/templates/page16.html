@@ -14,7 +14,7 @@
         <h4 id="page16-heading60" style="color:#505151;font-weight:600;text-align:center;">
             Editar Registro
         </h4>
-        <form class="list" id="page16-form16">
+        <form class="list" id="page16-form16" name="editReg">
             <label class="item item-input inp2" id="page16-input37">
                 <input disabled="" placeholder="Subir Foto" type="text">
                 </input>
@@ -80,11 +80,16 @@
                 <input ng-model="datosUsuario.clave" placeholder="Contraseña" type="password">
                 </input>
             </label>
-            <label class="item item-input inp" id="page16-input45">
-                <input ng-model="confirm_clave" placeholder="Repetir Contraseña" type="password">
+            <label class="item item-input inp" id="page16-input45" name="claveConfirm">
+                <input match="datosUsuario.clave" ng-model="claveConfirm" placeholder="Repetir Contraseña" type="password">
                 </input>
+                <div ng-show="editReg.claveConfirm.$error.mismatch">
+                    <span class="msg-error">
+                        Contraseña y Repetir Comtraseña deben Coincidir.
+                    </span>
+                </div>
             </label>
-            <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page15">
+            <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page25">
                 Cancelar
             </a>
             <a class="button button-balanced boton5" id="page16-button23" ng-click="actualizar()">

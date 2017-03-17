@@ -20,27 +20,27 @@
                 </img>
             </div>
             <h1 id="page15-heading52" style="color:#505151;font-weight:600;text-align:center;">
-                Carolina María Riquelme Vera
+                {{usuarioModificado.nombres}} {{usuarioModificado.ap_paterno}} {{usuarioModificado.ap_materno}}
             </h1>
             <h3 id="page15-heading53" style="color:#555353;text-align:center;">
-                carolina@gmail.com
+                {{usuarioModificado.email}}
             </h3>
             <h3 id="page15-heading59" style="color:#555353;text-align:center;">
-                Sexo Femenino
+                {{usuarioModificado.sexo}}
             </h3>
             <h3 id="page15-heading54" style="color:#555353;text-align:center;">
-                Nacimiento 22/12/1955
+                Nacimiento {{usuarioModificado.fec_nacimiento}}
             </h3>
             <h3 id="page15-heading56" style="color:#555353;text-align:center;">
-                13.653.876-3
+                {{usuarioModificado.nro_documento_identif}}
             </h3>
             <h3 id="page15-heading57" style="color:#555353;text-align:center;">
-                Chile- Valparaíso
+                {{usuarioModificado.idPais}} {{usuarioModificado.idRegion}}
             </h3>
-            <a class="button button-assertive boton5" id="page15-button20" ui-sref="menu.page16">
+            <a class="button button-assertive boton5" id="page15-button20" ng-click="modificarPerfil()">
                 Editar Datos
             </a>
-            <a class="button button-balanced boton5" id="page15-button21" ui-sref="menu.page25">
+            <a class="button button-balanced boton5" id="page15-button21" ng-click="confirmar()">
                 Confirmar
             </a>
             <ion-item class="item-icon-left botones" id="page15-list-item33" ui-sref="menu.page23">

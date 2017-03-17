@@ -83,41 +83,78 @@ class np_usuario
     {
         try {
 
-            $consulta = "UPDATE " . self::NOMBRE_TABLA .
-            " SET " .
-            self::NOMBRES . "=:nombres" . "," .
-            self::APPATERNO . "=:ap_paterno" . "," .
-            self::APMATERNO . "=:ap_materno" . "," .
-            self::SEXO . "=:sexo" . "," .
-            self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
-            self::IDPAIS . "=:idPais" . "," .
-            self::IDREGION . "=:idRegion" . "," .
-            self::CLAVE . "=:clave" .
-            " WHERE " . self::ID . "=:id";
+            if ($datosUsuario->clave == null) {
 
-            // Preparar la sentencia
-            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
+                $consulta = "UPDATE " . self::NOMBRE_TABLA .
+                " SET " .
+                self::NOMBRES . "=:nombres" . "," .
+                self::APPATERNO . "=:ap_paterno" . "," .
+                self::APMATERNO . "=:ap_materno" . "," .
+                self::SEXO . "=:sexo" . "," .
+                self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
+                self::IDPAIS . "=:idPais" . "," .
+                self::IDREGION . "=:idRegion" .
 
-            $sentencia->bindParam("id", $id);
-            $sentencia->bindParam("nombres", $nombres);
-            $sentencia->bindParam("ap_paterno", $ap_paterno);
-            $sentencia->bindParam("ap_materno", $ap_materno);
-            $sentencia->bindParam("sexo", $sexo);
-            $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
-            $sentencia->bindParam("idPais", $idPais);
-            $sentencia->bindParam("idRegion", $idRegion);
-            $sentencia->bindParam("clave", $clave);
+                " WHERE " . self::ID . "=:id";
 
-            $id                    = $datosUsuario->id;
-            $nombres               = $datosUsuario->nombres;
-            $ap_paterno            = $datosUsuario->ap_paterno;
-            $ap_materno            = $datosUsuario->ap_materno;
-            $sexo                  = $datosUsuario->sexo;
-            $nro_documento_identif = $datosUsuario->nro_documento_identif;
-            $idPais                = $datosUsuario->idPais;
-            $idRegion              = $datosUsuario->idRegion;
-            $clave                 = md5($datosUsuario->clave);
+                // Preparar la sentencia
+                $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
 
+                $sentencia->bindParam("id", $id);
+                $sentencia->bindParam("nombres", $nombres);
+                $sentencia->bindParam("ap_paterno", $ap_paterno);
+                $sentencia->bindParam("ap_materno", $ap_materno);
+                $sentencia->bindParam("sexo", $sexo);
+                $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
+                $sentencia->bindParam("idPais", $idPais);
+                $sentencia->bindParam("idRegion", $idRegion);
+
+                $id                    = $datosUsuario->id;
+                $nombres               = $datosUsuario->nombres;
+                $ap_paterno            = $datosUsuario->ap_paterno;
+                $ap_materno            = $datosUsuario->ap_materno;
+                $sexo                  = $datosUsuario->sexo;
+                $nro_documento_identif = $datosUsuario->nro_documento_identif;
+                $idPais                = $datosUsuario->idPais;
+                $idRegion              = $datosUsuario->idRegion;
+
+            } else {
+
+                $consulta = "UPDATE " . self::NOMBRE_TABLA .
+                " SET " .
+                self::NOMBRES . "=:nombres" . "," .
+                self::APPATERNO . "=:ap_paterno" . "," .
+                self::APMATERNO . "=:ap_materno" . "," .
+                self::SEXO . "=:sexo" . "," .
+                self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
+                self::IDPAIS . "=:idPais" . "," .
+                self::IDREGION . "=:idRegion" . "," .
+                self::CLAVE . "=:clave" .
+                " WHERE " . self::ID . "=:id";
+
+                // Preparar la sentencia
+                $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
+
+                $sentencia->bindParam("id", $id);
+                $sentencia->bindParam("nombres", $nombres);
+                $sentencia->bindParam("ap_paterno", $ap_paterno);
+                $sentencia->bindParam("ap_materno", $ap_materno);
+                $sentencia->bindParam("sexo", $sexo);
+                $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
+                $sentencia->bindParam("idPais", $idPais);
+                $sentencia->bindParam("idRegion", $idRegion);
+                $sentencia->bindParam("clave", $clave);
+
+                $id                    = $datosUsuario->id;
+                $nombres               = $datosUsuario->nombres;
+                $ap_paterno            = $datosUsuario->ap_paterno;
+                $ap_materno            = $datosUsuario->ap_materno;
+                $sexo                  = $datosUsuario->sexo;
+                $nro_documento_identif = $datosUsuario->nro_documento_identif;
+                $idPais                = $datosUsuario->idPais;
+                $idRegion              = $datosUsuario->idRegion;
+                $clave                 = md5($datosUsuario->clave);
+            }
             $sentencia->execute();
 
             return $sentencia->rowCount();
