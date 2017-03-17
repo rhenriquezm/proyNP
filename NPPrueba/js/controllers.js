@@ -66,9 +66,52 @@
     })
     app.controller('page23Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        var servicios = [{
+            "id": "funerarias",
+            "nom_ser": "Funeraria"
+        }, {
+            "id": "floreria",
+            "nom_ser": "Floreria"
+        }, {
+            "id": "seguro",
+            "nom_ser": "Seguros"
+        }];
+        $scope.servicios = servicios;
+        $scope.servicio = "funerarias";
+        $scope.ciudad = "295";
+        mostrarCiudades();
+
+        function mostrarCiudades() {
+            $http.get("http://localhost/proyNP/apiNP/np_servicios/ciudades").then(function(res) {
+                $scope.ciudades = res.data.ciudades;
+            })
+        }
+        $scope.buscar = function(ciudadServ) {
+            alert($scope.servicio + " " + ciudadServ);
+            $http.post("http://localhost/proyNP/apiNP/np_servicios/busqueda", {
+                "id": $scope.servicio,
+                "ciudad": ciudadServ
+            }).then(function(res) {
+                loginFactory.data = {};
+                if (res.data.estado == 1) {
+                    //loginFactory.data.mensaje = "exito";
+                    loginFactory.data.servicios = res.data.servicios
+                    $state.go("menu.page24");
+                    //console.log(res.data.servicios);
+                } else {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Lo sentimos',
+                        template: 'No se encontraron resultados para esa ciudad'
+                    });
+                    //loginFactory.data.mensaje = "No se encontraron Resultados";
+                    //console.log("No se encontraron Resultados");
+                }
+            })
+        }
     })
     app.controller('page24Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        $scope.servicios = loginFactory.data.servicios;
     })
     app.controller('page21Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
