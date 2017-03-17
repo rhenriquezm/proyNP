@@ -14,30 +14,22 @@
         <h4 id="page24-heading87" style="color:#505151;font-weight:600;text-align:center;">
             Resultado Búsqueda Servicios
         </h4>
-        <h class="title5" id="page24-heading92" style="color:#2075BA;font-weight:600;text-align:center;">
-            Florería Los Tulipanes
-        </h>
-        <h class="title4" id="page24-heading89" style="color:#555353;font-weight:400;text-align:center;">
-            Calle Luis Acevedo 1920 - Quintero - Región Valparaíso
-        </h>
-        <h class="title4" id="page24-heading94" style="color:#555353;font-weight:400;text-align:center;">
-            Fono: (09) 65789309
-        </h>
-        <h class="title3" id="page24-heading93" style="color:#555353;text-align:center;">
-            www.tulipanes.cl
-        </h>
-        <h class="title5" id="page24-heading88" style="color:#2075BA;font-weight:600;text-align:center;">
-            Florería Magnolia
-        </h>
-        <h class="title4" id="page24-heading91" style="color:#555353;font-weight:400;text-align:center;">
-            Avenida Playa Ancha 1444 - Valparaíso - Región de Valparaíso
-        </h>
-        <h class="title4" id="page24-heading95" style="color:#555353;font-weight:400;text-align:center;">
-            Fono: (09) 65872719
-        </h>
-        <h class="title3" id="page24-heading90" style="color:#555353;text-align:center;">
-            www.magnolia.cl
-        </h>
+        <ion-list>
+            <ion-item ng-repeat="servicio in servicios">
+                <h class="title5" id="page24-heading92" style="color:#2075BA;font-weight:600;text-align:center;">
+                    {{servicio.nom_funeraria}}
+                </h>
+                <h class="title4" id="page24-heading89" style="color:#555353;font-weight:400;text-align:center;">
+                    {{servicio.dir_funeraria}} - {{servicio.nom_com}} - Poner Region
+                </h>
+                <h class="title4" id="page24-heading94" style="color:#555353;font-weight:400;text-align:center;">
+                    {{servicio.num_funeriaria}}
+                </h>
+                <h class="title3" id="page24-heading93" style="color:#555353;text-align:center;">
+                    {{servicio.web_funeraria}}
+                </h>
+            </ion-item>
+        </ion-list>
         <div class="button-bar" id="page24-button-bar2">
             <button class="button button-stable button-block paginador" id="page24-button45" style="font-weight:600;">
                 <<
