@@ -64,7 +64,7 @@
     app.controller('page8Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page23Ctrl', function($scope, $stateParams, localStorageService) {
+    app.controller('page23Ctrl', function($scope, $stateParams, localStorageService, $http, loginFactory, $state) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         var servicios = [{
             "id": "funerarias",
@@ -109,7 +109,7 @@
             })
         }
     })
-    app.controller('page24Ctrl', function($scope, $stateParams, localStorageService) {
+    app.controller('page24Ctrl', function($scope, $stateParams, localStorageService, loginFactory) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         $scope.servicios = loginFactory.data.servicios;
     })

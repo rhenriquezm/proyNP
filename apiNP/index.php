@@ -6,12 +6,13 @@ require 'controladores/np_usuario.php';
 require 'controladores/np_pais.php';
 require 'controladores/np_region.php';
 require 'controladores/REG_POR_PAIS.php';
+require 'controladores/np_servicios.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExcepcionApi.php';
 
 // Constantes de estado
-const ESTADO_URL_INCORRECTA      = 2;
+const ESTADO_URL_INCORRECTAS     = 2;
 const ESTADO_EXISTENCIA_RECURSO  = 3;
 const ESTADO_METODO_NO_PERMITIDO = 4;
 
@@ -46,12 +47,12 @@ set_exception_handler(function ($exception) use ($vista) {
 if (isset($_GET['PATH_INFO'])) {
     $peticion = explode('/', $_GET['PATH_INFO']);
 } else {
-    throw new ExcepcionApi(ESTADO_URL_INCORRECTA, utf8_encode("No se reconoce la petición"));
+    throw new ExcepcionApi(ESTADO_URL_INCORRECTAS, utf8_encode("No se reconoce la petición"));
 }
 
 // Obtener recurso
 $recurso             = array_shift($peticion);
-$recursos_existentes = array('contactos', 'usuarios', 'np_usuario', 'np_pais', 'np_region', 'REG_POR_PAIS');
+$recursos_existentes = array('np_usuario', 'np_pais', 'np_region', 'REG_POR_PAIS', 'np_servicios');
 
 // Comprobar si existe el recurso
 if (!in_array($recurso, $recursos_existentes)) {
@@ -132,4 +133,23 @@ if ($recurso == 'np_usuario') {
             ];
             $vista->imprimir($cuerpo);
     }
+
+} else if ($recurso == 'np_servicios') {
+    switch ($metodo) {
+        case 'get':
+            $vista->imprimir(np_servicios::get($peticion));
+        case 'post':
+            $vista->imprimir(np_servicios::post($peticion));
+        case 'put':
+        case 'delete':
+        default:
+            // Método no aceptado
+            $vista->estado = 405;
+            $cuerpo        = [
+                "estado"  => ESTADO_METODO_NO_PERMITIDO,
+                "mensaje" => utf8_encode("Método no permitido"),
+            ];
+            $vista->imprimir($cuerpo);
+    }
+
 }

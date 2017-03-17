@@ -19,32 +19,17 @@
                 <span class="input-label">
                     Categoría
                 </span>
-                <select>
-                    <option>
-                    </option>
-                    <option>
-                        Femenino
-                    </option>
-                    <option>
-                        Maculino
-                    </option>
-                </select>
-            </label>
-            <label class="item item-select inp" id="page23-select34">
-                <span class="input-label">
-                    País
-                </span>
-                <select>
+                <select ng-model="servicio" ng-options="servicio.id as servicio.nom_ser for servicio in servicios">
                 </select>
             </label>
             <label class="item item-select inp" id="page23-select35">
                 <span class="input-label">
                     Ciudad
                 </span>
-                <select>
+                <select ng-model="ciudad" ng-options="ciudad.id_comuna as ciudad.nom_com for ciudad in ciudades">
                 </select>
             </label>
-            <a class="button button-balanced boton" id="page23-button43" ui-sref="menu.page24">
+            <a class="button button-balanced boton" id="page23-button43" ng-click="buscar(ciudad)">
                 Buscar
             </a>
             <ion-item class="item-icon-left botones" id="page23-list-item56" ui-sref="menu.page7">
