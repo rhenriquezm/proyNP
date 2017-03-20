@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet"/>
         <meta charset="utf-8">
             <meta content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" name="viewport">
                 <title>
@@ -55,6 +56,13 @@
                     <script src="js/services.js">
                     </script>
                     <script src="dist/angular-local-storage.min.js">
+                    </script>
+                    <script src="lib/ionic/js/ngmessages/angular-messages.min.js">
+                    </script>
+                    <script id="templates/form-errors.html" type="text/ng-template">
+                        <div class="form-error" ng-message="required">Campo requerido.</div>
+  <div class="form-error" ng-message="minlength">Debe ingresar minimo 5 caracteres.</div>
+  <div class="form-error" ng-message="maxlength">Debe ingresar menos de 50 caracteres.</div>
                     </script>
                     <!-- Only required for Tab projects w/ pages in multiple tabs 
     <script src="lib/ionicuirouter/ionicUIRouter.js"></script>

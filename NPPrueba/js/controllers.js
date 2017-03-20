@@ -184,24 +184,44 @@
                 return false;
             }
         }
+
+        function compararClave() {
+            if ($scope.claveConfirme == $scope.datosUsuario.clave) {
+                return true;
+            } else {
+                alert("Contraseñas no coinciden")
+                $scope.datosUsuario.clave = null;
+                $scope.claveConfirm = '';
+                return false;
+            }
+        }
         $scope.actualizar = function() {
             datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
-            if (compararObj()) {
-                loginFactory.data = {};
-                loginFactory.data.id = localStorageService.get('np_usuario').id;
-                loginFactory.data.nombres = $scope.datosUsuario.nombres;
-                loginFactory.data.ap_paterno = $scope.datosUsuario.ap_paterno;
-                loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
-                loginFactory.data.sexo = $scope.datosUsuario.sexo;
-                loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
-                loginFactory.data.idPais = $scope.datosUsuario.idPais;
-                loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
-                loginFactory.data.clave = $scope.datosUsuario.clave;
-                $ionicHistory.clearCache().then(function() {
-                    $state.go("menu.page15");
-                });
+            if (compararClave()) {
+                if (compararObj()) {
+                    loginFactory.data = {};
+                    loginFactory.data.id = localStorageService.get('np_usuario').id;
+                    loginFactory.data.nombres = $scope.datosUsuario.nombres;
+                    loginFactory.data.ap_paterno = $scope.datosUsuario.ap_paterno;
+                    loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
+                    loginFactory.data.sexo = $scope.datosUsuario.sexo;
+                    loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
+                    loginFactory.data.idPais = $scope.datosUsuario.idPais;
+                    loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
+                    loginFactory.data.clave = $scope.datosUsuario.clave;
+                    $ionicHistory.clearCache().then(function() {
+                        $state.go("menu.page15");
+                    });
+                } else {
+                    alert("NO CAMBIASTE NADA");
+                }
+            }
+        }
+        $scope.verificarTamano = function(texto) {
+            if (texto.length > 0) {
+                return false;
             } else {
-                alert("NO CAMBIASTE NADA");
+                return true;
             }
         }
     })

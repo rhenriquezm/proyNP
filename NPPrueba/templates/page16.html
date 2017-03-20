@@ -14,7 +14,7 @@
         <h4 id="page16-heading60" style="color:#505151;font-weight:600;text-align:center;">
             Editar Registro
         </h4>
-        <form class="list" id="page16-form16" name="editReg">
+        <form class="list" id="page16-form16" name="editReg" novalidate="">
             <label class="item item-input inp2" id="page16-input37">
                 <input disabled="" placeholder="Subir Foto" type="text">
                 </input>
@@ -27,12 +27,31 @@
                 <input disabled="true" ng-model="datosUsuario.email" placeholder="Correo" type="text">
                 </input>
             </label>
-            <label class="item item-input inp" id="page16-input39">
-                <input ng-model="datosUsuario.nombres" placeholder="Nombres" type="text">
+            <label class="item item-input inp" id="page16-input39" ng-class="{ 'has-error' : editReg.nombres.$invalid && !editReg.nombres.$pristine }">
+                <input class="form-control" name="nombres" ng-maxlength="45" ng-minlength="5" ng-model="datosUsuario.nombres" placeholder="Nombres" required="" type="text">
+                    <p class="help-block" ng-show="editReg.nombres.$error.required">
+                        Ingrese Nombres.
+                    </p>
+                    <p class="help-block" ng-show="editReg.nombres.$error.minlength">
+                        Username is too short.
+                    </p>
+                    <p class="help-block" ng-show="editReg.nombres.$error.maxlength">
+                        Username is too long.
+                    </p>
                 </input>
             </label>
+            <div class="item item-input inp " ng-class="{ 'has-error' : editReg.name.$invalid && !editReg.name.$pristine }">
+                <label>
+                    Name
+                </label>
+                <input class="form-control" name="name" ng-model="user.name" required="" type="text">
+                    <p class="help-block" ng-show="editReg.name.$invalid && !editReg.name.$pristine">
+                        You name is required.
+                    </p>
+                </input>
+            </div>
             <label class="item item-input inp" id="page16-input40">
-                <input ng-model="datosUsuario.ap_paterno" placeholder="Apellido Paterno" type="text">
+                <input ng-model="datosUsuario.ap_paterno" placeholder="Apellido Paterno" required="" type="text">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input41">
@@ -50,11 +69,11 @@
                 Fecha de Nacimiento
             </h1>
             <label class="item item-input inp3" id="page16-input42">
-                <input ng-model="datosUsuario.fec_nacimiento" placeholder="" type="date">
+                <input ng-model="datosUsuario.fec_nacimiento" placeholder="" required="" type="date">
                 </input>
             </label>
             <label class="item item-input inp2" id="page16-input43">
-                <input ng-model="datosUsuario.nro_documento_identif" placeholder="Documento de Identificación" type="text">
+                <input ng-model="datosUsuario.nro_documento_identif" placeholder="Documento de Identificación" required="" type="text">
                 </input>
             </label>
             <div class="info">
@@ -65,34 +84,33 @@
                 <span class="input-label">
                     Pais
                 </span>
-                <select class="form-group" id="pais" ng-change="mostrarRegiones(datosUsuario.idPais)" ng-model="datosUsuario.idPais" ng-options="paises.id as paises.nombre for paises in JSONPaises">
+                <select class="form-group" id="pais" ng-change="mostrarRegiones(datosUsuario.idPais)" ng-model="datosUsuario.idPais" ng-options="paises.id as paises.nombre for paises in JSONPaises" required="">
                 </select>
             </label>
             <label class="item item-select inp" id="page16-select22">
                 <span class="input-label">
                     Region
                 </span>
-                <select class="form-group" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" ng-valid="!pais">
+                <select class="form-group" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" required="">
                 </select>
             </label>
-            <!-- CONTRASEÑAS!!! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "-->
             <label class="item item-input inp" id="page16-input44">
-                <input ng-model="datosUsuario.clave" placeholder="Contraseña" type="password">
+                <input ng-model="datosUsuario.clave" nombre="clave" placeholder="Contraseña" type="password">
                 </input>
             </label>
             <label class="item item-input inp" id="page16-input45" name="claveConfirm">
-                <input match="datosUsuario.clave" ng-model="claveConfirm" placeholder="Repetir Contraseña" type="password">
+                <input ng-model="claveConfirm" placeholder="Repetir Contraseña" type="password">
                 </input>
-                <div ng-show="editReg.claveConfirm.$error.mismatch">
-                    <span class="msg-error">
-                        Contraseña y Repetir Comtraseña deben Coincidir.
-                    </span>
-                </div>
             </label>
+            <h1 id="page16-heading61" style="color:#000000;text-align:center;">
+                <span ng-if="datosUsuario.clave != claveConfirm" style="color:red">
+                    Las contraseñas no coinciden
+                </span>
+            </h1>
             <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page25">
                 Cancelar
             </a>
-            <a class="button button-balanced boton5" id="page16-button23" ng-click="actualizar()">
+            <a class="button button-balanced boton5" id="page16-button23" ng-click="actualizar()" ng-disabled="editReg.$invalid">
                 Actualizar
             </a>
             <ion-item class="item-icon-left botones" id="page16-list-item36" ui-sref="menu.page23">
