@@ -173,10 +173,14 @@
             });
         }
         //Fecha de Nacimiento
-        datosUsuarios.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
-        $scope.datosUsuario = datosUsuarios;
-        $scope.datosUsuario.clave = null;
-        $scope.claveConfirm = null;
+        function cargarDatos() {
+            datosUsuarios.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
+            $scope.datosUsuario = datosUsuarios;
+            $scope.datosH = datosHistoricos;
+            $scope.datosUsuario.clave = null;
+            $scope.claveConfirm = null;
+        }
+        cargarDatos();
 
         function compararObj() {
             if ($scope.datosUsuario.nombres != datosHistoricos.nombres || $scope.datosUsuario.ap_paterno != datosHistoricos.ap_paterno || $scope.datosUsuario.ap_materno != datosHistoricos.ap_materno || ($scope.datosUsuario.fec_nacimiento - datosHistoricos.fec_nacimiento) != 0 || $scope.datosUsuario.idPais != datosHistoricos.idPais || $scope.datosUsuario.idRegion != datosHistoricos.idRegion || $scope.datosUsuario.nro_documento_identif != datosHistoricos.nro_documento_identif || $scope.datosUsuario.sexo != datosHistoricos.sexo || $scope.datosUsuario.clave != null) {
@@ -196,10 +200,17 @@
             }
         }
         **/
+        $scope.cambio = true;
+        $scope.$watchCollection("datosUsuario", function(newCollection, oldCollection) {
+            if (newCollection.nombres != datosHistoricos.nombres || newCollection.ap_paterno != datosHistoricos.ap_paterno || newCollection.ap_materno != datosHistoricos.ap_materno || newCollection.idPais != datosHistoricos.idPais || newCollection.idRegion != datosHistoricos.idRegion || newCollection.nro_documento_identif != datosHistoricos.nro_documento_identif || newCollection.sexo != datosHistoricos.sexo) {
+                $scope.cambio = false;
+            } else {
+                $scope.cambio = true;
+            }
+        });
         $scope.actualizar = function() {
             datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
-            //if (compararClave()) {
-            if (compararObj()) {
+            if ($scope.cambio) {
                 loginFactory.data = {};
                 loginFactory.data.id = localStorageService.get('np_usuario').id;
                 loginFactory.data.nombres = $scope.datosUsuario.nombres;
@@ -216,7 +227,6 @@
             } else {
                 alert("NO CAMBIASTE NADA");
             }
-            //}
         }
         $scope.verificarTamano = function(texto) {
             if (texto.length > 0) {
