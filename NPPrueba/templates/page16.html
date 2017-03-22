@@ -1,6 +1,24 @@
 <ion-view id="page16" style="background-color:#DEEDF1;" title="">
     <ion-content class="has-header" padding="false">
         <ion-list id="page16-list16">
+            <script id="error-list.html" type="text/ng-template">
+                <div class="error" ng-message="required">
+                    <i class="ion-information-circled"></i> 
+                    Campo Obligatorio!.
+                 </div>
+                <div class="error" ng-message="minlength">
+                    <i class="ion-information-circled"></i> 
+                    Muy Corto...
+                </div>
+                <div class="error" ng-message="maxlength">
+                    <i class="ion-information-circled"></i> 
+                    Muy Largo...
+                </div>
+                <div class="error" ng-message="pattern">
+                    <i class="ion-information-circled"></i> 
+                    Formato incorrecto.
+                </div>
+            </script>
             <ion-item class="item-avatar" id="page16-list-item35">
                 <h2>
                     {{np_usuario.nombres | capitalize}} {{np_usuario.ap_paterno | capitalize}}
@@ -27,37 +45,30 @@
                 <input disabled="true" ng-model="datosUsuario.email" placeholder="Correo" type="text">
                 </input>
             </label>
-            <label class="item item-input inp" id="page16-input39" ng-class="{ 'has-error' : editReg.nombres.$invalid && !editReg.nombres.$pristine }">
-                <input class="form-control" name="nombres" ng-maxlength="45" ng-minlength="5" ng-model="datosUsuario.nombres" placeholder="Nombres" required="" type="text">
-                    <p class="help-block" ng-show="editReg.nombres.$error.required">
-                        Ingrese Nombres.
-                    </p>
-                    <p class="help-block" ng-show="editReg.nombres.$error.minlength">
-                        Username is too short.
-                    </p>
-                    <p class="help-block" ng-show="editReg.nombres.$error.maxlength">
-                        Username is too long.
-                    </p>
+            <label class="item item-input inp" id="page16-input39" ng-class="{ 'has-errors' : editReg.nombres.$invalid && !editReg.nombres.$pristine}">
+                <input class="form-control" name="nombres" ng-maxlength="45" ng-model="datosUsuario.nombres" ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Nombres" required="" type="text">
                 </input>
             </label>
-            <div class="item item-input inp " ng-class="{ 'has-error' : editReg.name.$invalid && !editReg.name.$pristine }">
-                <label>
-                    Name
-                </label>
-                <input class="form-control" name="name" ng-model="user.name" required="" type="text">
-                    <p class="help-block" ng-show="editReg.name.$invalid && !editReg.name.$pristine">
-                        You name is required.
-                    </p>
-                </input>
-            </div>
-            <label class="item item-input inp" id="page16-input40">
-                <input ng-model="datosUsuario.ap_paterno" placeholder="Apellido Paterno" required="" type="text">
+            <h1 ng-if="!editReg.nombres.$pristine" ng-messages="editReg.nombres.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
+            <label class="item item-input inp" id="page16-input40" ng-class="{ 'has-errors' : editReg.apaterno.$invalid && !editReg.apaterno.$pristine}">
+                <input name="apaterno" ng-maxlength="45" ng-model="datosUsuario.ap_paterno" ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Apellido Paterno" required="" type="text">
                 </input>
             </label>
-            <label class="item item-input inp" id="page16-input41">
-                <input ng-model="datosUsuario.ap_materno" placeholder="Apellido Materno" type="text">
+            <h1 ng-if="!editReg.apaterno.$pristine" ng-messages="editReg.apaterno.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
+            <label class="item item-input inp" id="page16-input41" ng-class="{ 'has-errors' : editReg.amaterno.$invalid && !editReg.amaterno.$pristine}">
+                <input name="amaterno" ng-maxlength="45" ng-model="datosUsuario.ap_materno" ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Apellido Materno" type="text">
                 </input>
             </label>
+            <h1 ng-if="!editReg.amaterno.$pristine" ng-messages="editReg.amaterno.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
             <label class="item item-select inp" id="page16-select20">
                 <span class="input-label">
                     Sexo
@@ -69,17 +80,17 @@
                 Fecha de Nacimiento
             </h1>
             <label class="item item-input inp3" id="page16-input42">
-                <input ng-model="datosUsuario.fec_nacimiento" placeholder="" required="" type="date">
+                <input max="{{hoy}}" name="fecha" ng-model="datosUsuario.fec_nacimiento" placeholder="" required="" type="date">
                 </input>
             </label>
-            <label class="item item-input inp2" id="page16-input43">
-                <input ng-model="datosUsuario.nro_documento_identif" placeholder="Documento de Identificación" required="" type="text">
+            <label class="item item-input inp" id="page16-input43" ng-class="{ 'has-errors' : editReg.rut.$invalid && !editReg.rut.$pristine}">
+                <input name="rut" ng-maxlength="10" ng-model="datosUsuario.nro_documento_identif" pattern="[0-9]{7,8}-[0-9Kk]{1}" placeholder="Doc Ident. ej. 12345678-5" type="text">
                 </input>
             </label>
-            <div class="info">
-                <img src="img/63vPskfJSa6XRQiNYOoD_info-01.png" style="display: block; width: auto; margin-left: auto;">
-                </img>
-            </div>
+            <h1 ng-if="!editReg.rut.$pristine" ng-messages="editReg.rut.$error">
+                <small ng-messages-include="error-list.html">
+                </small>
+            </h1>
             <label class="item item-select inp" id="page16-select21">
                 <span class="input-label">
                     Pais
@@ -87,30 +98,47 @@
                 <select class="form-group" id="pais" ng-change="mostrarRegiones(datosUsuario.idPais)" ng-model="datosUsuario.idPais" ng-options="paises.id as paises.nombre for paises in JSONPaises" required="">
                 </select>
             </label>
-            <label class="item item-select inp" id="page16-select22">
+            <label class="item item-select inp" id="page16-select22" ng-class="{ 'has-errors' : editReg.region.$invalid && !editReg.region.$pristine}">
                 <span class="input-label">
                     Region
                 </span>
-                <select class="form-group" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" required="">
+                <select class="form-group" name="region" ng-model="datosUsuario.idRegion" ng-options="regiones.id as regiones.nombre for regiones in JSONRegiones" required="">
                 </select>
             </label>
-            <label class="item item-input inp" id="page16-input44">
-                <input ng-model="datosUsuario.clave" nombre="clave" placeholder="Contraseña" type="password">
-                </input>
-            </label>
-            <label class="item item-input inp" id="page16-input45" name="claveConfirm">
-                <input ng-model="claveConfirm" placeholder="Repetir Contraseña" type="password">
-                </input>
-            </label>
-            <h1 id="page16-heading61" style="color:#000000;text-align:center;">
-                <span ng-if="datosUsuario.clave != claveConfirm" style="color:red">
-                    Las contraseñas no coinciden
-                </span>
+            <h1 ng-if="!editReg.region.$pristine" ng-messages="editReg.region.$error">
+                <small ng-messages-include="error-list.html">
+                </small>
             </h1>
+            <!-- CONTRASEÑAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
+            <label class="item item-input inp" id="page16-input44" ng-class="{ 'has-errors' : editReg.clave.$invalid && !editReg.lave.$pristine}">
+                <input name="clave" ng-minlength="6" ng-model="datosUsuario.clave" ng-pattern="datosUsuario.claveConfirm" ng-required="datosUsuario.claveConfirm" placeholder="Contraseña" type="password">
+                </input>
+            </label>
+            <h1 ng-if="!editReg.clave.$pristine" ng-messages="editReg.clave.$error">
+                <small ng-messages-include="error-list.html">
+                </small>
+            </h1>
+            <label class="item item-input inp" id="page16-input45" ng-class="{ 'has-errors' : editReg.claveConfirm.$invalid && !editReg.claveConfirm.$touched}">
+                <input name="claveConfirm" ng-disabled="!datosUsuario.clave" ng-model="claveConfirm" ng-pattern="datosUsuario.clave" ng-required="datosUsuario.clave" placeholder="Repetir Contraseña" type="password">
+                </input>
+            </label>
+            <h1 ng-if="claveConfirm != datosUsuario.clave" ng-messages="editReg.claveConfirm.$error">
+                <small class="error" ng-message="pattern">
+                    <i class="ion-information-circled">
+                    </i>
+                    Contraseñas deben coincidir.
+                </small>
+                <small class="error" ng-message="required">
+                    <i class="ion-information-circled">
+                    </i>
+                    Confirme su contraseña.
+                </small>
+            </h1>
+            <!-- CONTRASEÑAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
             <a class="button button-assertive boton5" id="page16-button22" ui-sref="menu.page25">
                 Cancelar
             </a>
-            <a class="button button-balanced boton5" id="page16-button23" ng-click="actualizar()" ng-disabled="editReg.$invalid">
+            <a class="button button-balanced boton5" id="page16-button23" ng-click="actualizar()" ng-disabled="editReg.$invalid || editReg.$pristine">
                 Actualizar
             </a>
             <ion-item class="item-icon-left botones" id="page16-list-item36" ui-sref="menu.page23">

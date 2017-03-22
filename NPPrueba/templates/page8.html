@@ -6,6 +6,24 @@
                     {{np_usuario.nombres | capitalize}} {{np_usuario.ap_paterno | capitalize}}
                 </h2>
             </ion-item>
+            <script id="error-list.html" type="text/ng-template">
+                <div class="error" ng-message="required">
+                    <i class="ion-information-circled"></i> 
+                    Campo Obligatorio!.
+                 </div>
+                <div class="error" ng-message="minlength">
+                    <i class="ion-information-circled"></i> 
+                    Muy Corto...
+                </div>
+                <div class="error" ng-message="maxlength">
+                    <i class="ion-information-circled"></i> 
+                    Muy Largo...
+                </div>
+                <div class="error" ng-message="pattern">
+                    <i class="ion-information-circled"></i> 
+                    Formato incorrecto.
+                </div>
+            </script>
         </ion-list>
         <div class="logo1">
             <img src="img/tIrjN3XOQvGTqYimflpU_logo1-01.png" style="display: block; width: auto; height: auto; margin-left: auto; margin-right: auto;">
@@ -14,7 +32,7 @@
         <h4 id="page8-heading3" style="color:#505151;font-weight:600;text-align:center;">
             Crear Biografía
         </h4>
-        <form class="list" id="page8-form8">
+        <form class="list" id="page8-form8" name="crearBio">
             <label class="item item-input inp2" id="page8-input5">
                 <input placeholder="Subir Foto" type="text">
                 </input>
@@ -23,18 +41,31 @@
                 <img src="img/Kn7BEwckT7u4ISpIRH22_add-01.png" style="display: block; width: auto; margin-left: auto;">
                 </img>
             </div>
-            <label class="item item-input inp" id="page8-input6">
-                <input placeholder="Nombres" type="text">
+            <label class="item item-input inp" id="page8-input6" ng-class="{ 'has-errors' : crearBio.nombres.$invalid && !crearBio.nombres.$pristine}">
+                <input class="form-control" name="nombres" ng-maxlength="45" ng-model="" ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Nombres" required="" type="text">
                 </input>
             </label>
-            <label class="item item-input inp" id="page8-input7">
-                <input placeholder="Apellido Paterno" type="text">
+            <h1 ng-if="!crearBio.nombres.$pristine" ng-messages="crearBio.nombres.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
+            <label class="item item-input inp" id="page8-input7" ng-class="{ 'has-errors' : crearBio.apaterno.$invalid && !crearBio.apaterno.$pristine}">
+                <input name="apaterno" ng-maxlength="45" ng-model="
+                " ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Apellido Paterno" required="" type="text">
                 </input>
             </label>
-            <label class="item item-input inp" id="page8-input8">
-                <input placeholder="Apellido Materno" type="text">
+            <h1 ng-if="!crearBio.apaterno.$pristine" ng-messages="crearBio.apaterno.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
+            <label class="item item-input inp" id="page16-input41" ng-class="{ 'has-errors' : crearBio.amaterno.$invalid && !crearBio.amaterno.$pristine}">
+                <input name="amaterno" ng-maxlength="45" ng-model="" ng-pattern="/^[a-zA-Z ,.'-]+$/" placeholder="Apellido Materno" type="text">
                 </input>
             </label>
+            <h1 ng-if="!crearBio.amaterno.$pristine" ng-messages="crearBio.amaterno.$error">
+                <small class="help-block" ng-messages-include="error-list.html">
+                </small>
+            </h1>
             <label class="item item-select inp" id="page8-select1">
                 <span class="input-label">
                     Sexo
@@ -54,14 +85,14 @@
                 Fecha de Nacimiento
             </h1>
             <label class="item item-input inp3" id="page8-input11">
-                <input placeholder="" type="date">
+                <input max="{{hoy}}" name="fecha" ng-model="" placeholder="" required="" type="date">
                 </input>
             </label>
             <h1 id="page8-heading8" style="color:#000000;text-align:center;">
                 Fecha de Fallecimiento
             </h1>
             <label class="item item-input inp3" id="page8-input15">
-                <input placeholder="" type="date">
+                <input max="{{hoy}}" name="fechaFa" ng-model="" placeholder="" required="" type="date">
                 </input>
             </label>
             <label class="item item-input inp" id="page8-textarea1">
