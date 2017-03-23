@@ -1,17 +1,5 @@
 (function() {
     var app = angular.module('app.controllers', ['LocalStorageModule', 'ngMessages'])
-    app.directive('match', function($parse) {
-        return {
-            require: 'ngModel',
-            link: function(scope, elem, attrs, ctrl) {
-                scope.$watch(function() {
-                    return $parse(attrs.match)(scope) === ctrl.$modelValue;
-                }, function(currentValue) {
-                    ctrl.$setValidity('mismatch', currentValue);
-                });
-            }
-        };
-    });
     app.factory("loginFactory", function() {
         return {
             data: {}
@@ -119,13 +107,52 @@
     app.controller('page22Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page14Ctrl', function($scope, $stateParams, localStorageService, $ionicHistory, $state) {
-        if (localStorageService.get('np_usuario') != null) {
-            $scope.np_usuario = localStorageService.get('np_usuario');
-        } else {
-            $ionicHistory.clearCache().then(function() {
-                $state.go("menu.home");
+    app.controller('page14Ctrl', function($scope, $http, $stateParams, localStorageService, $ionicHistory, $state, loginFactory, $filter) {
+        $scope.nuevoUsuario = {};
+        $scope.hoy = $filter('date')(new Date(), 'yyyy-MM-dd');
+        //Sexo
+        $scope.nuevoUsuario.idConvenio = 1;
+        $scope.nuevoUsuario.clave = null;
+        $scope.claveConfirm = null;
+        $scope.sexos = [{
+            "id": "M",
+            "nombre": "Masculino"
+        }, {
+            "id": "F",
+            "nombre": "Femenino"
+        }];
+        //Pais y Region 
+        $scope.JSONPaises = {};
+        $scope.JSONRegiones = {};
+        obtenerPaises();
+        // EVENTO QUE GENERA LA DIRECTIVA ng-change
+        $scope.mostrarRegiones = function(selPaises) {
+            // $scope.selPaises NOS TRAE EL VALOR DEL SELECT DE paises
+            obtenerRegiones(selPaises);
+        };
+
+        function obtenerRegiones(idPais) {
+            //console.log(idPais);
+            $http.post('http://localhost/proyNP/apiNP/REG_POR_PAIS/obtenerRegiones', {
+                "id": idPais
+            }).then(function(res) {
+                $scope.JSONRegiones = res.data.regiones;
+                $scope.nuevoUsuario.idRegion = $scope.JSONRegiones[0].id;
             });
+        }
+
+        function obtenerPaises() {
+            $http.get('http://localhost/proyNP/apiNP/REG_POR_PAIS/obtenerPaises').
+            then(function(res) {
+                $scope.JSONPaises = res.data.paises;
+            });
+        }
+        $scope.registrar = function() {
+            //loginFactory.nuevoUsuario = $scope.nuevoUsuario;
+            //$ionicHistory.clearCache().then(function() {
+            //    $state.go("menu.page15");
+            //});
+            console.log($scope.nuevoUsuario);
         }
     })
     app.controller('page16Ctrl', function($scope, $stateParams, localStorageService, $state, loginFactory, $http, $ionicHistory, $filter) {
@@ -181,14 +208,6 @@
             $scope.claveConfirm = null;
         }
         cargarDatos();
-
-        function compararObj() {
-            if ($scope.datosUsuario.nombres != datosHistoricos.nombres || $scope.datosUsuario.ap_paterno != datosHistoricos.ap_paterno || $scope.datosUsuario.ap_materno != datosHistoricos.ap_materno || ($scope.datosUsuario.fec_nacimiento - datosHistoricos.fec_nacimiento) != 0 || $scope.datosUsuario.idPais != datosHistoricos.idPais || $scope.datosUsuario.idRegion != datosHistoricos.idRegion || $scope.datosUsuario.nro_documento_identif != datosHistoricos.nro_documento_identif || $scope.datosUsuario.sexo != datosHistoricos.sexo || $scope.datosUsuario.clave != null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
         /** function compararClave() {
             if ($scope.claveConfirm == $scope.datosUsuario.clave) {
                 return true;
@@ -226,13 +245,6 @@
                 });
             } else {
                 alert("NO CAMBIASTE NADA");
-            }
-        }
-        $scope.verificarTamano = function(texto) {
-            if (texto.length > 0) {
-                return false;
-            } else {
-                return true;
             }
         }
     })

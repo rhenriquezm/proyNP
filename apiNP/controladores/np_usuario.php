@@ -169,7 +169,7 @@ class np_usuario
     public function registrar()
     {
         $cuerpo  = file_get_contents('php://input');
-        $usuario = json_decode($cuerpo);
+        $usuario = json_decode($cuerpo); //json
 
         $resultado = self::crear($usuario);
 
@@ -192,38 +192,57 @@ class np_usuario
 
 /**
  * Crea un nuevo usuario en la tabla "usuario"
- * @param mixed $datosUsuario columnas del registro
+ * @param mixed $nuevoUsuario columnas del registro
  * @return int codigo para determinar si la inserción fue exitosa
  */
-    public function crear($datosUsuario)
+    public function crear($nuevoUsuario)
     {
-        $nombre = $datosUsuario->nombre;
+        $email      = $datosUsuario->email;
+        $nombres    = $nuevoUsuario->nombres;
+        $ap_paterno = $nuevoUsuario->ap_paterno;
+        $ap_materno = $nuevoUsuario->ap_materno;
+        $clave      = $nuevoUsuario->clave;
+        $sexo       = $nuevoUsuario->sexo;
+        $idPais     = $nuevoUsuario->idPais;
+        $idRegion   = $nuevoUsuario->idRegion;
+        $direccion  = $nuevoUsuario->direccion;
+        $fono       = $nuevoUsuario->fono;
+        $idConvenio = $nuevoUsuario->idConvenio;
 
-        $contrasena           = $datosUsuario->contrasena;
-        $contrasenaEncriptada = self::encriptarContrasena($contrasena);
-
-        $correo = $datosUsuario->correo;
-
-        $claveApi = self::generarClaveApi();
+        $clave = md5($clave);
 
         try {
 
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
 
             // Sentencia INSERT
-            $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
-            self::NOMBRE . "," .
-            self::CONTRASENA . "," .
-            self::CLAVE_API . "," .
-            self::CORREO . ")" .
-                " VALUES(?,?,?,?)";
+            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(email, nombres, ap_paterno, ap_materno, sexo, idPais, idRegion, direccion, fono, clave, idConvenio) VALUES( " .
+                ":email" . "," .
+                ":nombres" . "," .
+                ":ap_paterno" . "," .
+                ":ap_materno" . "," .
+                ":sexo" . "," .
+                ":idPais" . "," .
+                ":idRegion" . "," .
+                ":direccion" . "," .
+                ":fono" . "," .
+                ":clave" . "," .
+                ":idConvenio" . ")";
 
             $sentencia = $pdo->prepare($comando);
 
-            $sentencia->bindParam(1, $nombre);
-            $sentencia->bindParam(2, $contrasenaEncriptada);
-            $sentencia->bindParam(3, $claveApi);
-            $sentencia->bindParam(4, $correo);
+            $sentencia->bindParam("email", $email);
+
+            $sentencia->bindParam("nombres", $nombres);
+            $sentencia->bindParam("ap_paterno", $ap_paterno);
+            $sentencia->bindParam("ap_materno", $ap_materno);
+            $sentencia->bindParam("sexo", $sexo);
+            $sentencia->bindParam("idPais", $idPais);
+            $sentencia->bindParam("idRegion", $idRegion);
+            $sentencia->bindParam("direccion", $direccion);
+            $sentencia->bindParam("fono", $fono);
+            $sentencia->bindParam("clave", $clave);
+            $sentencia->bindParam("idConvenio", $idConvenio);
 
             $resultado = $sentencia->execute();
 
