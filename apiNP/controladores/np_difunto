@@ -1,0 +1,163 @@
+<?php
+
+require_once '/../datos/ConexionBD.php';
+
+class np_difunto
+{
+    // Datos de la tabla "np_difunto"
+
+    const NOMBRE_TABLA      = "np_difunto";
+    const ID                = "id";
+    const EMAIL             = "email";
+    const NOMBRES           = "nombres";
+    const APPATERNO         = "ap_paterno";
+    const APMATERNO         = "ap_materno";
+    const FECNACIMIENTO     = "fec_nacimiento";
+    const FECFALLECIMIENTO  = "fec_fallecimiento";
+    const EPITAFIO          = "epitafio";
+    const BIOGRAFIA         = "biografia";
+    const FECACTU           = "fec_actu";
+    const IDADMIN           = "idAdministrador";
+    const IDPLAN            = "idPlan";
+    const CODEQR            = "code_QR";
+    const ESTADO            = "estado";
+    const SEXO              = "sexo";
+    const IDTEMA            = "idTema";
+    const IDCOMUNA          = "idComuna";
+    const FECREGISTRO       = "fec_registro";
+    const IDLUGARENTIERRO   = "idLugarEntierro";
+    const IDREGION          = "idRegion";
+    const OTROLUGARENTIERRO = "otro_lugar_entierro";
+    const IDPAIS            = "idPais";
+    const URLAVATAR         = "url_avatar";
+    const URLBANNER         = "url_banner";
+
+    // Codigos de Estados
+
+    const CODIGO_EXITO            = 1;
+    const ESTADO_EXITO            = 1;
+    const ESTADO_ERROR            = 2;
+    const ESTADO_ERROR_BD         = 3;
+    const ESTADO_ERROR_PARAMETROS = 4;
+    const ESTADO_NO_ENCONTRADO    = 5;
+
+    const ESTADO_CREACION_EXITOSA       = 1;
+    const ESTADO_CREACION_FALLIDA       = 2;
+    const ESTADO_AUSENCIA_CLAVE_API     = 4;
+    const ESTADO_CLAVE_NO_AUTORIZADA    = 5;
+    const ESTADO_URL_INCORRECTA         = 6;
+    const ESTADO_FALLA_DESCONOCIDA      = 7;
+    const ESTADO_PARAMETROS_INCORRECTOS = 8;
+
+    // Para hacer  algun dato o bien realizar el login
+
+    public static function post($peticion)
+    {
+        // HTTP - Metodos Rest (post, get, put, delete)
+        if ($peticion[0] == 'registro') { // La peticion extraida desde la url
+            return self::registrar(); // Se devuelve el resultado de la
+        } else {
+            throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
+        }
+    }
+
+    public function registrar()
+    {
+        $cuerpo  = file_get_contents('php://input');
+        $difunto = json_decode($cuerpo); //json
+
+        $resultado = self::crear($difunto);
+
+        switch ($resultado) {
+            case self::ESTADO_CREACION_EXITOSA:
+                http_response_code(200);
+                return
+                    [
+                    "estado"  => self::ESTADO_CREACION_EXITOSA,
+                    "mensaje" => utf8_encode("¡Registro con éxito!"),
+                ];
+                break;
+            case self::ESTADO_CREACION_FALLIDA:
+                throw new ExcepcionApi(self::ESTADO_CREACION_FALLIDA, "Ha ocurrido un error");
+                break;
+            default:
+                throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA, "Falla desconocida", 400);
+        }
+    }
+
+/**
+ * Crea un nuevo Difunto en la tabla "Difunto"
+ * @param mixed $nuevoDifunto columnas del registro
+ * @return int codigo para determinar si la inserción fue exitosa
+ */
+    public function crear($nuevoDifunto)
+    {
+        $nombres             = $nuevoDifunto->nombres;
+        $ap_paterno          = $nuevoDifunto->ap_paterno;
+        $ap_materno          = $nuevoDifunto->ap_materno;
+        $fec_nacimiento      = $nuevoDifunto->fec_nacimiento;
+        $fec_fallecimiento   = $nuevoDifunto->fec_fallecimiento;
+        $epitafio            = $nuevoDifunto->epitafio;
+        $biografia           = $nuevoDifunto->biografia;
+        $idAdministrador     = $nuevoDifunto->idAdministrador;
+        $idPlan              = $nuevoDifunto->idPlan;
+        $sexo                = $nuevoDifunto->sexo;
+        $idTema              = $nuevoDifunto->idTema;
+        $idLugarEntierro     = $nuevoDifunto->idLugarEntierro;
+        $idRegion            = $nuevoDifunto->idRegion;
+        $otro_lugar_entierro = $nuevoDifunto->otro_lugar_entierro;
+        $idPais              = $nuevoDifunto->idPais;
+
+        try {
+
+            $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
+
+            // Sentencia INSERT
+            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(nombres, ap_paterno, ap_materno, fec_fallecimiento, epitafio, biografia, idAdministrador, idPlan, sexo, idTema, idLugarEntierro, idRegion, otro_lugar_entierro, idPais) VALUES( " .
+                ":nombres" . "," .
+                ":ap_paterno" . "," .
+                ":ap_materno" . "," .
+                ":fec_nacimiento" . "," .
+                ":fec_fallecimiento" . "," .
+                ":epitafio" . "," .
+                ":biografia" . "," .
+                ":idAdministrador" . "," .
+                ":idPlan" . "," .
+                ":sexo" . "," .
+                ":idTema" . "," .
+                ":idLugarEntierro" . "," .
+                ":idRegion" . "," .
+                ":otro_lugar_entierro" . "," .
+                ":idPais" . ")";
+
+            $sentencia = $pdo->prepare($comando);
+
+            $sentencia->bindParam("nombres", $nombres);
+            $sentencia->bindParam("ap_paterno", $ap_paterno);
+            $sentencia->bindParam("ap_materno", $ap_materno);
+            $sentencia->bindParam("fec_nacimiento", $fec_nacimiento);
+            $sentencia->bindParam("fec_fallecimiento", $fec_fallecimiento);
+            $sentencia->bindParam("epitafio", $epitafio);
+            $sentencia->bindParam("biografia", $biografia);
+            $sentencia->bindParam("idAdministrador", $idAdministrador);
+            $sentencia->bindParam("idPlan", $idPlan);
+            $sentencia->bindParam("sexo", $sexo);
+            $sentencia->bindParam("idTema", $idTema);
+            $sentencia->bindParam("idLugarEntierro", $idLugarEntierro);
+            $sentencia->bindParam("idRegion", $idRegion);
+            $sentencia->bindParam("otro_lugar_entierro", $otro_lugar_entierro);
+            $sentencia->bindParam("idPais", $idPais);
+
+            $resultado = $sentencia->execute();
+
+            if ($resultado) {
+                return self::ESTADO_CREACION_EXITOSA;
+            } else {
+                return self::ESTADO_CREACION_FALLIDA;
+            }
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
+        }
+    }
+
+}

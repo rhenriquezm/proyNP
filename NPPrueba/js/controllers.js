@@ -137,7 +137,6 @@
                 "id": idPais
             }).then(function(res) {
                 $scope.JSONRegiones = res.data.regiones;
-                $scope.nuevoUsuario.idRegion = $scope.JSONRegiones[0].id;
             });
         }
 
@@ -149,9 +148,9 @@
         }
         $scope.registrar = function() {
             //loginFactory.nuevoUsuario = $scope.nuevoUsuario;
-            //$ionicHistory.clearCache().then(function() {
-            //    $state.go("menu.page15");
-            //});
+            $ionicHistory.clearCache().then(function() {
+                $state.go("menu.page15");
+            });
             console.log($scope.nuevoUsuario);
         }
     })
@@ -221,15 +220,17 @@
         **/
         $scope.cambio = true;
         $scope.$watchCollection("datosUsuario", function(newCollection, oldCollection) {
-            if (newCollection.nombres != datosHistoricos.nombres || newCollection.ap_paterno != datosHistoricos.ap_paterno || newCollection.ap_materno != datosHistoricos.ap_materno || newCollection.idPais != datosHistoricos.idPais || newCollection.idRegion != datosHistoricos.idRegion || newCollection.nro_documento_identif != datosHistoricos.nro_documento_identif || newCollection.sexo != datosHistoricos.sexo) {
+            $scope.nocambios = "";
+            if (newCollection.nombres != datosHistoricos.nombres || newCollection.ap_paterno != datosHistoricos.ap_paterno || newCollection.ap_materno != datosHistoricos.ap_materno || newCollection.idPais != datosHistoricos.idPais || newCollection.idRegion != datosHistoricos.idRegion || newCollection.nro_documento_identif != datosHistoricos.nro_documento_identif || newCollection.sexo != datosHistoricos.sexo || newCollection.clave !== null) {
                 $scope.cambio = false;
             } else {
                 $scope.cambio = true;
             }
         });
         $scope.actualizar = function() {
+            console.log($scope.file);
             datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
-            if ($scope.cambio) {
+            if (!$scope.cambio) {
                 loginFactory.data = {};
                 loginFactory.data.id = localStorageService.get('np_usuario').id;
                 loginFactory.data.nombres = $scope.datosUsuario.nombres;
@@ -244,7 +245,7 @@
                     $state.go("menu.page15");
                 });
             } else {
-                alert("NO CAMBIASTE NADA");
+                $scope.nocambios = "No realizaste cambios en tu perfil";
             }
         }
     })
@@ -363,5 +364,22 @@
         return function(input) {
             return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
         }
+    })
+    app.directive('file', function() {
+        return {
+            restrict: 'AE',
+            scope: {
+                file: '@'
+            },
+            link: function(scope, el, attrs) {
+                el.bind('change', function(event) {
+                    var files = event.target.files;
+                    var file = files[0];
+                    scope.file = file;
+                    scope.$parent.file = file;
+                    scope.$apply();
+                });
+            }
+        };
     })
 }());

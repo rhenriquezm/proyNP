@@ -3124,7 +3124,12 @@ q {
  * Address inconsistent and variable font size in all browsers.
  */
 small {
-  font-size: 80%; }
+  font-size: 8px;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  float: left;
+  width: 100%; }}
 
 /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -10580,6 +10585,8 @@ h3, .h3 {
     margin: 5px 0 0;
 }
  
+
+
 .error {
   padding: 10px 16px;
   font-family: "ionicons", Gadget, sans-serif;

@@ -197,7 +197,7 @@ class np_usuario
  */
     public function crear($nuevoUsuario)
     {
-        $email      = $datosUsuario->email;
+        $email      = $nuevoUsuario->email;
         $nombres    = $nuevoUsuario->nombres;
         $ap_paterno = $nuevoUsuario->ap_paterno;
         $ap_materno = $nuevoUsuario->ap_materno;
