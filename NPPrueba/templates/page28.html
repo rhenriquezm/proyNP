@@ -1,0 +1,53 @@
+<ion-view id="page28" nav-transition="none" style="background-color:#DEEDF1;" title="">
+    <ion-content class="has-header" padding="false">
+        <ion-list id="page28-list28">
+            <ion-item class="item-avatar" id="page28-list-item32">
+                <h2>
+                    {{np_usuario.nombres | capitalize}} {{np_usuario.ap_paterno | capitalize}}
+                </h2>
+            </ion-item>
+        </ion-list>
+        <div class="logo1">
+            <img src="img/tIrjN3XOQvGTqYimflpU_logo1-01.png" style="display: block; width: auto; height: auto; margin-left: auto; margin-right: auto;">
+            </img>
+        </div>
+        <h4 id="page28-heading51" style="color:#505151;font-weight:600;text-align:center;">
+            Registro
+        </h4>
+        <form class="list" id="page28-form28">
+            <div class="perfil">
+                <img src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+                </img>
+            </div>
+            <h1 id="page28-heading52" style="color:#505151;font-weight:600;text-align:center;">
+                {{usuarioModificado.nombres}} {{usuarioModificado.ap_paterno}} {{usuarioModificado.ap_materno}}
+            </h1>
+            <h3 id="page28-heading53" style="color:#555353;text-align:center;">
+                {{usuarioModificado.email}}
+            </h3>
+            <h3 id="page28-heading59" style="color:#555353;text-align:center;">
+                {{usuarioModificado.sexo}}
+            </h3>
+            <h3 id="page28-heading54" style="color:#555353;text-align:center;">
+                Nacimiento {{usuarioModificado.fec_nacimiento}}
+            </h3>
+            <h3 id="page28-heading56" style="color:#555353;text-align:center;">
+                {{usuarioModificado.nro_documento_identif}}
+            </h3>
+            <h3 id="page28-heading57" style="color:#555353;text-align:center;">
+                {{usuarioModificado.idPais}} {{usuarioModificado.idRegion}}
+            </h3>
+            <a class="button button-assertive boton5" id="page28-button20" ng-click="modificarPerfil()">
+                Editar Datos
+            </a>
+            <a class="button button-balanced boton5" id="page28-button21" ng-click="confirmar()">
+                Confirmar
+            </a>
+            <ion-item class="item-icon-left botones" id="page28-list-item33" ui-sref="menu.page23">
+                <i class="icon No Icon">
+                </i>
+                SERVICIOS
+            </ion-item>
+        </form>
+    </ion-content>
+</ion-view>

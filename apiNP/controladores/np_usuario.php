@@ -51,9 +51,7 @@ class np_usuario
     public static function post($peticion)
     {
         // HTTP - Metodos Rest (post, get, put, delete)
-        if ($peticion[0] == 'registro') { // La peticion extraida desde la url
-            return self::registrar(); // Se devuelve el resultado de la
-        } else if ($peticion[0] == 'login') { //
+        if ($peticion[0] == 'login') { //
             return self::loguear(); //
         } else if ($peticion[0] == 'usuario') { //
             return self::obtenerPerfil(); //
@@ -74,6 +72,9 @@ class np_usuario
                 throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO, "El contacto al que intentas acceder no existe", 404);
             }
 
+        } else if ($peticion[0] == 'registro') {
+            // La peticion extraida desde la url
+            return self::registrar();
         } else {
             throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
         }
@@ -197,6 +198,7 @@ class np_usuario
  */
     public function crear($nuevoUsuario)
     {
+
         $email      = $nuevoUsuario->email;
         $nombres    = $nuevoUsuario->nombres;
         $ap_paterno = $nuevoUsuario->ap_paterno;
@@ -205,8 +207,6 @@ class np_usuario
         $sexo       = $nuevoUsuario->sexo;
         $idPais     = $nuevoUsuario->idPais;
         $idRegion   = $nuevoUsuario->idRegion;
-        $direccion  = $nuevoUsuario->direccion;
-        $fono       = $nuevoUsuario->fono;
         $idConvenio = $nuevoUsuario->idConvenio;
 
         $clave = md5($clave);
@@ -216,7 +216,7 @@ class np_usuario
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
 
             // Sentencia INSERT
-            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(email, nombres, ap_paterno, ap_materno, sexo, idPais, idRegion, direccion, fono, clave, idConvenio) VALUES( " .
+            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(email, nombres, ap_paterno, ap_materno, sexo, idPais, idRegion, clave, url_avatar, idConvenio) VALUES( " .
                 ":email" . "," .
                 ":nombres" . "," .
                 ":ap_paterno" . "," .
@@ -224,10 +224,12 @@ class np_usuario
                 ":sexo" . "," .
                 ":idPais" . "," .
                 ":idRegion" . "," .
-                ":direccion" . "," .
-                ":fono" . "," .
                 ":clave" . "," .
+                ":url_avatar" . "," .
                 ":idConvenio" . ")";
+
+            $avatar_man   = "https://s3-us-west-2.amazonaws.com/nplace-movil/EXom2Fr3-masc.png";
+            $avatar_woman = "https://s3-us-west-2.amazonaws.com/nplace-movil/PsqtGGBV-fem.png";
 
             $sentencia = $pdo->prepare($comando);
 
@@ -239,9 +241,13 @@ class np_usuario
             $sentencia->bindParam("sexo", $sexo);
             $sentencia->bindParam("idPais", $idPais);
             $sentencia->bindParam("idRegion", $idRegion);
-            $sentencia->bindParam("direccion", $direccion);
-            $sentencia->bindParam("fono", $fono);
             $sentencia->bindParam("clave", $clave);
+            if ($sexo == 'M') {
+                $sentencia->bindParam("url_avatar", $avatar_man);
+            } else {
+                $sentencia->bindParam("url_avatar", $avatar_woman);
+            }
+
             $sentencia->bindParam("idConvenio", $idConvenio);
 
             $resultado = $sentencia->execute();

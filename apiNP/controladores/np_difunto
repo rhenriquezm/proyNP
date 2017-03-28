@@ -51,7 +51,7 @@ class np_difunto
 
     // Para hacer  algun dato o bien realizar el login
 
-    public static function post($peticion)
+    public static function put($peticion)
     {
         // HTTP - Metodos Rest (post, get, put, delete)
         if ($peticion[0] == 'registro') { // La peticion extraida desde la url

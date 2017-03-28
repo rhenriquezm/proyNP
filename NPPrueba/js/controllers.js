@@ -110,9 +110,8 @@
     app.controller('page14Ctrl', function($scope, $http, $stateParams, localStorageService, $ionicHistory, $state, loginFactory, $filter) {
         $scope.nuevoUsuario = {};
         $scope.hoy = $filter('date')(new Date(), 'yyyy-MM-dd');
-        //Sexo
+        $scope.nuevoUsuario.fec_registro = $scope.hoy;
         $scope.nuevoUsuario.idConvenio = 1;
-        $scope.nuevoUsuario.clave = null;
         $scope.claveConfirm = null;
         $scope.sexos = [{
             "id": "M",
@@ -121,18 +120,16 @@
             "id": "F",
             "nombre": "Femenino"
         }];
-        //Pais y Region 
+        ///// Pais y Region 
         $scope.JSONPaises = {};
         $scope.JSONRegiones = {};
         obtenerPaises();
-        // EVENTO QUE GENERA LA DIRECTIVA ng-change
         $scope.mostrarRegiones = function(selPaises) {
             // $scope.selPaises NOS TRAE EL VALOR DEL SELECT DE paises
             obtenerRegiones(selPaises);
         };
 
         function obtenerRegiones(idPais) {
-            //console.log(idPais);
             $http.post('http://localhost/proyNP/apiNP/REG_POR_PAIS/obtenerRegiones', {
                 "id": idPais
             }).then(function(res) {
@@ -146,12 +143,13 @@
                 $scope.JSONPaises = res.data.paises;
             });
         }
+        //////////////
         $scope.registrar = function() {
-            //loginFactory.nuevoUsuario = $scope.nuevoUsuario;
+            console.log($scope.nuevoUsuario.fec_nacimiento);
+            loginFactory.data.usuario = $scope.nuevoUsuario;
             $ionicHistory.clearCache().then(function() {
-                $state.go("menu.page15");
+                $state.go("menu.page28");
             });
-            console.log($scope.nuevoUsuario);
         }
     })
     app.controller('page16Ctrl', function($scope, $stateParams, localStorageService, $state, loginFactory, $http, $ionicHistory, $filter) {
@@ -345,6 +343,42 @@
     })
     app.controller('page12Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+    })
+    app.controller('page28Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
+        var usuarioModificado = loginFactory.data.usuario;
+        $scope.usuarioModificado = loginFactory.data.usuario;
+        console.log(usuarioModificado);
+        $scope.confirmar = function() {
+            $http.put("http://localhost/proyNP/apiNP/np_usuario/registro", {
+                'email': usuarioModificado.email,
+                'nombres': usuarioModificado.nombres,
+                'ap_paterno': usuarioModificado.ap_paterno,
+                'ap_materno': usuarioModificado.ap_materno,
+                'sexo': usuarioModificado.sexo,
+                'idPais': usuarioModificado.idPais,
+                'idRegion': usuarioModificado.idRegion,
+                'clave': usuarioModificado.clave,
+                'idConvenio': usuarioModificado.idConvenio
+            }).then(function(res) {
+                var estado = res.data.estado;
+                if (estado == 1) {
+                    $state.go("menu.home")
+                    //localStorageService.set("apellido", res.data.usuario.ap_paterno);
+                    //loginFactory.data.nombres = localStorageService.get('nombre');
+                    //loginFactory.data.ap_paterno = localStorageService.get('apellido');
+                } else {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Oops',
+                        template: 'No se pudo guardar'
+                    });
+                }
+            });
+        }
+        $scope.modificarPerfil = function() {
+            //$ionicHistory.clearCache().then(function() {
+            $state.go("menu.page16");
+            // });
+        }
     })
     app.controller('menuCtrl', function($scope, $stateParams, localStorageService, $ionicHistory, $state) {
         $scope.np_usuario = localStorageService.get('np_usuario');

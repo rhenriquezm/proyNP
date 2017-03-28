@@ -188,6 +188,14 @@ angular.module('app.routes', []).config(function($stateProvider, $urlRouterProvi
                 controller: 'page12Ctrl'
             }
         }
+    }).state('menu.page28', {
+        url: '/preregistrou',
+        views: {
+            'side-menu21': {
+                templateUrl: 'templates/page28.html',
+                controller: 'page28Ctrl'
+            }
+        }
     }).state('menu', {
         url: '/side-menu21',
         templateUrl: 'templates/menu.html',
