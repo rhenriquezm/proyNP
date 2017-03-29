@@ -199,31 +199,39 @@ class np_usuario
     public function crear($nuevoUsuario)
     {
 
-        $email      = $nuevoUsuario->email;
-        $nombres    = $nuevoUsuario->nombres;
-        $ap_paterno = $nuevoUsuario->ap_paterno;
-        $ap_materno = $nuevoUsuario->ap_materno;
-        $clave      = $nuevoUsuario->clave;
-        $sexo       = $nuevoUsuario->sexo;
-        $idPais     = $nuevoUsuario->idPais;
-        $idRegion   = $nuevoUsuario->idRegion;
-        $idConvenio = $nuevoUsuario->idConvenio;
-
-        $clave = md5($clave);
-
+        $email                 = $nuevoUsuario->email;
+        $nombres               = $nuevoUsuario->nombres;
+        $ap_paterno            = $nuevoUsuario->ap_paterno;
+        $ap_materno            = $nuevoUsuario->ap_materno;
+        $sexo                  = $nuevoUsuario->sexo;
+        $fec_nacimiento        = $nuevoUsuario->fec_nacimiento;
+        $nro_documento_identif = $nuevoUsuario->nro_documento_identif;
+        $idPais                = $nuevoUsuario->idPais;
+        $idRegion              = $nuevoUsuario->idRegion;
+        $direccion             = $nuevoUsuario->direccion;
+        $fono                  = $nuevoUsuario->fono;
+        $clave                 = $nuevoUsuario->clave;
+        $idConvenio            = $nuevoUsuario->idConvenio;
+        $fec_nacimientodate
+         $clave = md5($clave);
         try {
 
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
 
             // Sentencia INSERT
-            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(email, nombres, ap_paterno, ap_materno, sexo, idPais, idRegion, clave, url_avatar, idConvenio) VALUES( " .
+
+            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(email, nombres, ap_paterno, ap_materno, sexo, fec_nacimiento, nro_documento_identif, idPais, idRegion, direccion, fono, clave, url_avatar, idConvenio) VALUES( " .
                 ":email" . "," .
                 ":nombres" . "," .
                 ":ap_paterno" . "," .
                 ":ap_materno" . "," .
                 ":sexo" . "," .
+                ":fec_nacimiento" . "," .
+                ":nro_documento_identif" . "," .
                 ":idPais" . "," .
                 ":idRegion" . "," .
+                ":direccion" . "," .
+                ":fono" . "," .
                 ":clave" . "," .
                 ":url_avatar" . "," .
                 ":idConvenio" . ")";
@@ -234,20 +242,22 @@ class np_usuario
             $sentencia = $pdo->prepare($comando);
 
             $sentencia->bindParam("email", $email);
-
             $sentencia->bindParam("nombres", $nombres);
             $sentencia->bindParam("ap_paterno", $ap_paterno);
             $sentencia->bindParam("ap_materno", $ap_materno);
             $sentencia->bindParam("sexo", $sexo);
+            $sentencia->bindParam("fec_nacimiento", $fec_nacimiento);
+            $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
             $sentencia->bindParam("idPais", $idPais);
             $sentencia->bindParam("idRegion", $idRegion);
+            $sentencia->bindParam("direccion", $direccion);
+            $sentencia->bindParam("fono", $fono);
             $sentencia->bindParam("clave", $clave);
             if ($sexo == 'M') {
                 $sentencia->bindParam("url_avatar", $avatar_man);
             } else {
                 $sentencia->bindParam("url_avatar", $avatar_woman);
             }
-
             $sentencia->bindParam("idConvenio", $idConvenio);
 
             $resultado = $sentencia->execute();

@@ -110,7 +110,11 @@
     app.controller('page14Ctrl', function($scope, $http, $stateParams, localStorageService, $ionicHistory, $state, loginFactory, $filter) {
         $scope.nuevoUsuario = {};
         $scope.hoy = $filter('date')(new Date(), 'yyyy-MM-dd');
-        $scope.nuevoUsuario.fec_registro = $scope.hoy;
+        //$scope.nuevoUsuario.fec_registro = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $scope.nuevoUsuario.ap_materno = null;
+        $scope.nuevoUsuario.fono = null;
+        $scope.nuevoUsuario.direccion = null
+        $scope.nuevoUsuario.nro_documento_identif = null;
         $scope.nuevoUsuario.idConvenio = 1;
         $scope.claveConfirm = null;
         $scope.sexos = [{
@@ -145,11 +149,16 @@
         }
         //////////////
         $scope.registrar = function() {
-            console.log($scope.nuevoUsuario.fec_nacimiento);
             loginFactory.data.usuario = $scope.nuevoUsuario;
             $ionicHistory.clearCache().then(function() {
                 $state.go("menu.page28");
             });
+        }
+        $scope.prueba = function() {
+            //$scope.nuevoUsuario.fec_nacimiento = new Date($scope.nuevoUsuario.fec_nacimiento);
+            console.log("1111111: " + $scope.nuevoUsuario.fec_nacimiento);
+            $scope.nuevoUsuario.fec_nacimiento = $filter('date')($scope.nuevoUsuario.fec_nacimiento, 'yyyy-MM-dd');
+            console.log("22222: " + $scope.nuevoUsuario.fec_nacimiento);
         }
     })
     app.controller('page16Ctrl', function($scope, $stateParams, localStorageService, $state, loginFactory, $http, $ionicHistory, $filter) {
@@ -345,20 +354,24 @@
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
     app.controller('page28Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
-        var usuarioModificado = loginFactory.data.usuario;
-        $scope.usuarioModificado = loginFactory.data.usuario;
-        console.log(usuarioModificado);
+        var usuarioNuevo = loginFactory.data.usuario;
+        $scope.usuarioNuevo = loginFactory.data.usuario;
+        console.log(usuarioNuevo);
         $scope.confirmar = function() {
             $http.put("http://localhost/proyNP/apiNP/np_usuario/registro", {
-                'email': usuarioModificado.email,
-                'nombres': usuarioModificado.nombres,
-                'ap_paterno': usuarioModificado.ap_paterno,
-                'ap_materno': usuarioModificado.ap_materno,
-                'sexo': usuarioModificado.sexo,
-                'idPais': usuarioModificado.idPais,
-                'idRegion': usuarioModificado.idRegion,
-                'clave': usuarioModificado.clave,
-                'idConvenio': usuarioModificado.idConvenio
+                'email': usuarioNuevo.email,
+                'nombres': usuarioNuevo.nombres,
+                'ap_paterno': usuarioNuevo.ap_paterno,
+                'ap_materno': usuarioNuevo.ap_materno,
+                'sexo': usuarioNuevo.sexo,
+                'fec_nacimiento': usuarioNuevo.fec_nacimiento,
+                'direccion': usuarioNuevo.direccion,
+                'fono': usuarioNuevo.fono,
+                'nro_documento_identif': usuarioNuevo.nro_documento_identif,
+                'idPais': usuarioNuevo.idPais,
+                'idRegion': usuarioNuevo.idRegion,
+                'clave': usuarioNuevo.clave,
+                'idConvenio': usuarioNuevo.idConvenio
             }).then(function(res) {
                 var estado = res.data.estado;
                 if (estado == 1) {

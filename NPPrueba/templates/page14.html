@@ -91,7 +91,7 @@
                 Fecha de Nacimiento (Opcional)
             </h1>
             <label class="item item-input inp3" id="page14-input31" ng-class="{ 'has-errors' : nuevoUs.fecha.$invalid && (!nuevoUs.fecha.$pristine || nuevoUs.$submitted)}">
-                <input date="yyyy-MM-dd" max="{{hoy}}" name="fecha" ng-model="nuevoUsuario.fec_nacimiento" placeholder="" type="date">
+                <input max="{{hoy}}" name="fecha" ng-bind="date | date:'yyyy/MM/dd'" ng-model="nuevoUsuario.fec_nacimiento" placeholder="" type="date">
                 </input>
             </label>
             <h1 ng-if="!nuevoUs.fecha.$pristine || nuevoUs.$submitted" ng-messages="nuevoUs.fecha.$error">
