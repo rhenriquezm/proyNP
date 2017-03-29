@@ -61,6 +61,15 @@ class np_difunto
         }
     }
 
+    public static function post($peticion)
+    {
+        if ($peticion[0] == "obtenerdifuntos") {
+            return self::obtenerDifuntos();
+        } else {
+            throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
+        }
+    }
+
     public function registrar()
     {
         $cuerpo  = file_get_contents('php://input');
@@ -92,7 +101,6 @@ class np_difunto
  */
     public function crear($nuevoDifunto)
     {
-
         try {
 
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
@@ -165,4 +173,53 @@ class np_difunto
         }
     }
 
+    public function obtenerDifuntos()
+    {
+        $cuerpo  = file_get_contents('php://input');
+        $difunto = json_decode($cuerpo); //json
+
+        $id = $difunto->id;
+
+        $difuntosBD = self::obtenerDifuntoPorId($id);
+
+        if ($difuntosBD != null) {
+            http_response_code(200);
+
+            $respuesta = $difuntosBD;
+
+            return ["estado" => 1, "usuario" => $respuesta];
+        } else {
+            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
+                "Ha ocurrido un error");
+        }
+    }
+
+    public function obtenerDifuntoPorId($id)
+    {
+
+        $comando = "SELECT " .
+        self::ID . "," .
+        self::NOMBRES . "," .
+        self::APPATERNO . "," .
+        self::IDPLAN . "," .
+        self::URLAVATAR . "," .
+        self::IDPLAN .
+        " FROM " . self::NOMBRE_TABLA .
+        " WHERE " . self::IDADMIN . " =:id";
+
+        try {
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
+
+            $sentencia->bindParam("id", $id);
+
+            if ($sentencia->execute()) {
+                return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e) {
+
+        }
+    }
 }
