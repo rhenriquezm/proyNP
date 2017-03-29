@@ -33,14 +33,9 @@
             Registro
         </h4>
         <form class="list" id="page14-form14" name="nuevoUs" ng-submit="nuevoUs.$valid && registrar()" novalidate="novalidate">
-            <label class="item item-input inp2" id="page14-input27">
-                <input placeholder="Subir Foto" type="text">
-                </input>
+            <label class="item item-input inp2" id="page16-input37">
+                <input file-model="data.imagen" input="" type="file"/>
             </label>
-            <div class="add">
-                <img src="img/Kn7BEwckT7u4ISpIRH22_add-01.png" style="display: block; width: auto; margin-left: auto;">
-                </img>
-            </div>
             <label class="item item-input inp" id="page14-input28" ng-class="{ 'has-errors' : nuevoUs.correo.$invalid && (!nuevoUs.correo.$pristine || nuevoUs.$submitted)}">
                 <input name="correo" ng-maxlength="45" ng-model="nuevoUsuario.email" ng-pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" placeholder="Correo" required="" type="email">
                 </input>

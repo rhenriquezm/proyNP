@@ -218,9 +218,10 @@ class np_usuario
         $direccion             = $nuevoUsuario->direccion;
         $fono                  = $nuevoUsuario->fono;
         $clave                 = $nuevoUsuario->clave;
+        $url_avatar            = $nuevoUsuario->url_avatar;
         $idConvenio            = $nuevoUsuario->idConvenio;
-        $fec_nacimientodate
-         $clave = md5($clave);
+
+        $clave = md5($clave);
         try {
 
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
@@ -260,16 +261,34 @@ class np_usuario
             $sentencia->bindParam("direccion", $direccion);
             $sentencia->bindParam("fono", $fono);
             $sentencia->bindParam("clave", $clave);
-            if ($sexo == 'M') {
-                $sentencia->bindParam("url_avatar", $avatar_man);
+            if ($url_avatar == null) {
+                if ($sexo == 'M') {
+                    $sentencia->bindParam("url_avatar", $avatar_man);
+                } else {
+                    $sentencia->bindParam("url_avatar", $avatar_woman);
+                }
             } else {
-                $sentencia->bindParam("url_avatar", $avatar_woman);
+                $sentencia->bindParam("url_avatar", $url_avatar);
             }
+
             $sentencia->bindParam("idConvenio", $idConvenio);
 
             $resultado = $sentencia->execute();
+            $ultima_id = $pdo->lastInsertId();
+
+            for ($i = 0; $i < 3; $i++) {
+
+                $comando_1 = "INSERT INTO np_difunto (idAdministrador, idPlan, idTema, idRegion, idPais) VALUES (" .
+                    $ultima_id . "," .
+                    "1 , 1 " . "," .
+                    $idRegion . "," .
+                    $idPais . ")";
+                $sentencia = $pdo->prepare($comando_1);
+                $sentencia->execute();
+            }
 
             if ($resultado) {
+
                 return self::ESTADO_CREACION_EXITOSA;
             } else {
                 return self::ESTADO_CREACION_FALLIDA;

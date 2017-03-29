@@ -92,46 +92,34 @@ class np_difunto
  */
     public function crear($nuevoDifunto)
     {
-        $nombres             = $nuevoDifunto->nombres;
-        $ap_paterno          = $nuevoDifunto->ap_paterno;
-        $ap_materno          = $nuevoDifunto->ap_materno;
-        $fec_nacimiento      = $nuevoDifunto->fec_nacimiento;
-        $fec_fallecimiento   = $nuevoDifunto->fec_fallecimiento;
-        $epitafio            = $nuevoDifunto->epitafio;
-        $biografia           = $nuevoDifunto->biografia;
-        $idAdministrador     = $nuevoDifunto->idAdministrador;
-        $idPlan              = $nuevoDifunto->idPlan;
-        $sexo                = $nuevoDifunto->sexo;
-        $idTema              = $nuevoDifunto->idTema;
-        $idLugarEntierro     = $nuevoDifunto->idLugarEntierro;
-        $idRegion            = $nuevoDifunto->idRegion;
-        $otro_lugar_entierro = $nuevoDifunto->otro_lugar_entierro;
-        $idPais              = $nuevoDifunto->idPais;
 
         try {
 
             $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
 
             // Sentencia INSERT
-            $comando = "INSERT INTO " . self::NOMBRE_TABLA . "(nombres, ap_paterno, ap_materno, fec_fallecimiento, epitafio, biografia, idAdministrador, idPlan, sexo, idTema, idLugarEntierro, idRegion, otro_lugar_entierro, idPais) VALUES( " .
-                ":nombres" . "," .
-                ":ap_paterno" . "," .
-                ":ap_materno" . "," .
-                ":fec_nacimiento" . "," .
-                ":fec_fallecimiento" . "," .
-                ":epitafio" . "," .
-                ":biografia" . "," .
-                ":idAdministrador" . "," .
-                ":idPlan" . "," .
-                ":sexo" . "," .
-                ":idTema" . "," .
-                ":idLugarEntierro" . "," .
-                ":idRegion" . "," .
-                ":otro_lugar_entierro" . "," .
-                ":idPais" . ")";
+            $comando = "UPDATE " . self::NOMBRE_TABLA .
+            " SET " .
+            self::NOMBRES . "=:nombres" . "," .
+            self::APPATERNO . "=:ap_paterno" . "," .
+            self::APMATERNO . "=:ap_materno" . "," .
+            self::SEXO . "=:sexo" . "," .
+            self::FECNACIMIENTO . "=:fec_nacimiento" . "," .
+            self::FECFALLECIMIENTO . "=:fec_fallecimiento" . "," .
+            self::EPITAFIO . "=:epitafio" . "," .
+            self::BIOGRAFIA . "=:biografia" . "," .
+            self::IDADMIN . "=:idAdministrador" . "," .
+            self::IDPLAN . "=:idPlan" . "," .
+            self::IDTEMA . "=:idTema" . "," .
+            self::IDLUGARENTIERRO . "=:idLugarEntierro" . "," .
+            self::IDREGION . "=:idRegion" . "," .
+            self::OTROLUGARENTIERRO . "=:otro_lugar_entierro" . "," .
+            self::IDPAIS . "=:idPais" .
+            " WHERE " . self::ID . "=:id";
 
             $sentencia = $pdo->prepare($comando);
 
+            $sentencia->bindParam("id", $id);
             $sentencia->bindParam("nombres", $nombres);
             $sentencia->bindParam("ap_paterno", $ap_paterno);
             $sentencia->bindParam("ap_materno", $ap_materno);
@@ -147,6 +135,23 @@ class np_difunto
             $sentencia->bindParam("idRegion", $idRegion);
             $sentencia->bindParam("otro_lugar_entierro", $otro_lugar_entierro);
             $sentencia->bindParam("idPais", $idPais);
+
+            $nombres             = $nuevoDifunto->nombres;
+            $ap_paterno          = $nuevoDifunto->ap_paterno;
+            $ap_materno          = $nuevoDifunto->ap_materno;
+            $fec_nacimiento      = $nuevoDifunto->fec_nacimiento;
+            $fec_fallecimiento   = $nuevoDifunto->fec_fallecimiento;
+            $epitafio            = $nuevoDifunto->epitafio;
+            $biografia           = $nuevoDifunto->biografia;
+            $idAdministrador     = $nuevoDifunto->idAdministrador;
+            $idPlan              = $nuevoDifunto->idPlan;
+            $sexo                = $nuevoDifunto->sexo;
+            $idTema              = $nuevoDifunto->idTema;
+            $idLugarEntierro     = $nuevoDifunto->idLugarEntierro;
+            $idRegion            = $nuevoDifunto->idRegion;
+            $otro_lugar_entierro = $nuevoDifunto->otro_lugar_entierro;
+            $idPais              = $nuevoDifunto->idPais;
+            $id                  = $nuevoDifunto->id;
 
             $resultado = $sentencia->execute();
 
