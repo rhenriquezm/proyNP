@@ -94,7 +94,8 @@ class np_usuario
                 self::SEXO . "=:sexo" . "," .
                 self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
                 self::IDPAIS . "=:idPais" . "," .
-                self::IDREGION . "=:idRegion" .
+                self::IDREGION . "=:idRegion" . "," .
+                self::URLAVATAR . "=:urlAvatar" .
 
                 " WHERE " . self::ID . "=:id";
 
@@ -109,6 +110,7 @@ class np_usuario
                 $sentencia->bindParam("nro_documento_identif", $nro_documento_identif);
                 $sentencia->bindParam("idPais", $idPais);
                 $sentencia->bindParam("idRegion", $idRegion);
+                $sentencia->bindParam("urlAvatar", $url_avatar);
 
                 $id                    = $datosUsuario->id;
                 $nombres               = $datosUsuario->nombres;
@@ -118,6 +120,7 @@ class np_usuario
                 $nro_documento_identif = $datosUsuario->nro_documento_identif;
                 $idPais                = $datosUsuario->idPais;
                 $idRegion              = $datosUsuario->idRegion;
+                $url_avatar            = $datosUsuario->url_avatar;
 
             } else {
 
@@ -130,7 +133,9 @@ class np_usuario
                 self::NRODOCUMENTO . "=:nro_documento_identif" . "," .
                 self::IDPAIS . "=:idPais" . "," .
                 self::IDREGION . "=:idRegion" . "," .
-                self::CLAVE . "=:clave" .
+                self::CLAVE . "=:clave" . "," .
+                self::URLAVATAR . "=:urlAvatar" .
+
                 " WHERE " . self::ID . "=:id";
 
                 // Preparar la sentencia
@@ -145,6 +150,7 @@ class np_usuario
                 $sentencia->bindParam("idPais", $idPais);
                 $sentencia->bindParam("idRegion", $idRegion);
                 $sentencia->bindParam("clave", $clave);
+                $sentencia->bindParam("urlAvatar", $url_avatar);
 
                 $id                    = $datosUsuario->id;
                 $nombres               = $datosUsuario->nombres;
@@ -155,6 +161,7 @@ class np_usuario
                 $idPais                = $datosUsuario->idPais;
                 $idRegion              = $datosUsuario->idRegion;
                 $clave                 = md5($datosUsuario->clave);
+                $url_avatar            = $datosUsuario->url_avatar;
             }
             $sentencia->execute();
 

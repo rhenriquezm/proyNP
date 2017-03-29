@@ -156,6 +156,69 @@
         $scope.np_usuario = localStorageService.get('np_usuario');
         $scope.hoy = $filter('date')(new Date(), 'yyyy-MM-dd');
         //Sexo
+        $scope.sizeLimit = 10585760; // 10MB in Bytes
+        $scope.uploadProgress = 0;
+        $scope.creds = {};
+
+        function upload(file) {
+            AWS.config.update({
+                accessKeyId: "AKIAJCFGX4TXMKJOMHMQ",
+                secretAccessKey: "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"
+            });
+            AWS.config.region = 'us-west-2';
+            var bucket = new AWS.S3({
+                params: {
+                    Bucket: "nplace-movil"
+                }
+            });
+            if (file) {
+                // Perform File Size Check First
+                var fileSize = Math.round(parseInt(file.size));
+                if (fileSize > $scope.sizeLimit) {
+                    console.log('Sorry, your attachment is too big. <br/> Maximum ' + $scope.fileSizeLabel() + ' file attachment allowed', 'File Too Large');
+                    return false;
+                }
+                // Prepend Unique String To Prevent Overwrites
+                var uniqueFileName = $scope.uniqueString() + '-' + file.name;
+                $scope.datosUsuario.url_avatar = "https://s3-us-west-2.amazonaws.com/nplace-movil/" + uniqueFileName;
+                var params = {
+                    Key: uniqueFileName,
+                    ContentType: file.type,
+                    Body: file,
+                    ServerSideEncryption: 'AES256',
+                    ACL: 'public-read'
+                };
+                bucket.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err.message, err.code);
+                        return false;
+                    } else {
+                        setTimeout(function() {
+                            $scope.uploadProgress = 0;
+                            $scope.$digest();
+                        }, 4000);
+                    }
+                }).on('httpUploadProgress', function(progress) {
+                    $scope.uploadProgress = Math.round(progress.loaded / progress.total * 100);
+                    $scope.$digest();
+                });
+            } else {
+                // No File Selected
+                console.log('Please select a file to upload');
+            }
+        }
+        $scope.fileSizeLabel = function() {
+            // Convert Bytes To MB
+            return Math.round($scope.sizeLimit / 1024 / 1024) + 'MB';
+        };
+        $scope.uniqueString = function() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < 8; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        };
         $scope.sexos = [{
             "id": "M",
             "nombre": "Masculino"
@@ -203,6 +266,7 @@
             $scope.datosH = datosHistoricos;
             $scope.datosUsuario.clave = null;
             $scope.claveConfirm = null;
+            $scope.data = {};
         }
         cargarDatos();
         /** function compararClave() {
@@ -226,7 +290,7 @@
             }
         });
         $scope.actualizar = function() {
-            console.log($scope.file);
+            upload($scope.data.imagen);
             datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
             if (!$scope.cambio) {
                 loginFactory.data = {};
@@ -239,6 +303,7 @@
                 loginFactory.data.idPais = $scope.datosUsuario.idPais;
                 loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
                 loginFactory.data.clave = $scope.datosUsuario.clave;
+                loginFactory.data.url_avatar = $scope.datosUsuario.url_avatar;
                 $ionicHistory.clearCache().then(function() {
                     $state.go("menu.page15");
                 });
@@ -276,7 +341,8 @@
                 'nro_documento_identif': usuarioModificado.nro_documento_identif,
                 'idPais': usuarioModificado.idPais,
                 'idRegion': usuarioModificado.idRegion,
-                'clave': usuarioModificado.clave
+                'clave': usuarioModificado.clave,
+                'url_avatar': usuarioModificado.url_avatar
             }).then(function(res) {
                 var estado = res.data.estado;
                 if (estado == 1) {
@@ -416,4 +482,18 @@
             }
         };
     })
+    app.directive('fileModel', ['$parse', function($parse) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                var model = $parse(attrs.fileModel);
+                var modelSetter = model.assign;
+                element.bind('change', function() {
+                    scope.$apply(function() {
+                        modelSetter(scope, element[0].files[0]);
+                    });
+                });
+            }
+        };
+    }])
 }());
