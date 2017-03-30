@@ -11929,12 +11929,12 @@ body.header-hack.platform-ios ion-nav-bar .bar.bar-header, body.header-hack.plat
 
 .perfil {
     overflow: hidden;
-    -moz-border-radius: 120px;
-    -webkit-border-radius: 120px;
-    border-radius: 120px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
     border: 1px solid #CCC;
     display: block;
-    width: 100px;
+    width: 140px;
     text-align: center;
     padding: 0px;
     margin-top: 0px;
@@ -12015,6 +12015,27 @@ body.header-hack.platform-ios ion-nav-bar .bar.bar-header, body.header-hack.plat
     text-align: center;
     padding: 0px;
     margin-top: 10px !important;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: 5%;
+    float: left;
+}
+
+.perfil14 img {
+    vertical-align: bottom;
+    position: relative;
+    z-index: -1;
+    width: 30px;
+    height: auto;
+    text-align: left;
+}
+
+.perfil14 {
+    border: 1px solid #CCC;
+    display: inherit;
+    text-align: center;
+    padding: 0px;
+    margin-top: -10px !important;
     margin-right: auto;
     margin-bottom: 0px;
     margin-left: 5%;

@@ -11,24 +11,26 @@
             <img src="img/tIrjN3XOQvGTqYimflpU_logo1-01.png" style="display: block; width: auto; height: auto; margin-left: auto; margin-right: auto;">
             </img>
         </div>
-        <h4 id="page25-heading96" style="color:#505151;font-weight:600;text-align:center;">
+        <h5 id="page25-heading96" style="color:#505151;font-weight:600;text-align:center;">
             Mi Perfil
-        </h4>
+        </h5>
         <form class="list" id="page25-form25">
+            <br/>
             <div class="perfil">
                 <img src="{{perfil_usuario.url_avatar}}" style="display: block; margin-left: auto; margin-right: auto;">
                 </img>
             </div>
-            <h1 id="page25-heading97" style="color:#505151;font-weight:600;text-align:center;">
+            <br/>
+            <h3 "="" class="ion-person" id="page25-heading97" style="color:#505151;font-size:18px;font-weight:500;text-align:center;">
                 {{perfil_usuario.nombres}} {{perfil_usuario.ap_paterno}} {{perfil_usuario.ap_materno}}
-            </h1>
-            <h3 id="page25-heading98" style="color:#555353;text-align:center;">
+            </h3>
+            <h3 class="ion-email" id="page25-heading98" style="color:#505151;font-size:16px;font-weight:500;text-align:center;">
                 {{perfil_usuario.email}}
             </h3>
             <h3 id="page25-heading99" style="color:#555353;text-align:center;">
                 {{perfil_usuario.sexo}}
             </h3>
-            <h3 id="page25-heading100" style="color:#555353;text-align:center;">
+            <h3 class="ion-calendar" h3="" id="page25-heading100" style="color:#555353;text-align:center;">
                 {{perfil_usuario.fec_nacimiento}}
             </h3>
             <h3 id="page25-heading101" style="color:#555353;text-align:center;">
@@ -40,105 +42,86 @@
             <a class="button button-assertive boton" id="page25-button51" ng-click="modificarPerfil()">
                 Editar Datos
             </a>
-            <h4 id="page25-heading103" style="color:#505151;font-weight:600;text-align:center;">
+            <h5 id="page25-heading103" style="color:#505151;font-weight:600;text-align:center;">
                 Mis Biografías
+            </h5>
+            <br/>
+            <h4 id="page25-heading103" ng-if="data.difuntos == null" style="color:#505151;font-weight:600;text-align:center;">
+                No hay Biografías por mostrar
             </h4>
-            <br>
-                <ion-slide-box>
-                    <ion-slide>
-                        <table border="0" width="100%">
-                            <tr>
-                                <td align="center">
-                                    <img alt="Second slide" data-src="" height="134" src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" width="133">
-                                    </img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title11">
-                                        Plan Gratuito
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title11">
-                                        Biografía por Actidsdsdsvar
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title10">
-                                        *Titular/Amigo
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title10">
-                                        <a class="boton-slide" href="#" role="button">
-                                            Administrar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </ion-slide>
-                    <ion-slide>
-                        <table border="0" width="100%">
-                            <tr>
-                                <td align="center">
-                                    <img alt="Second slide" data-src="" height="134" src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" width="133">
-                                    </img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title11">
-                                        Plan Gratuito
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title11">
-                                        Biografía por Actidsdsdsvar
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title10">
-                                        *Titular/Amigo
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="title10">
-                                        <a class="boton-slide" href="#" role="button">
-                                            Administrar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <br>
-                        </br>
-                    </ion-slide>
-                </ion-slide-box>
-                <h4 id="page25-heading104" style="color:#505151;font-weight:600;text-align:center;">
-                    Mi Último Comentario
-                </h4>
-            </br>
+            <br/>
+            <ion-slide-box ng-if="data.difuntos.length != null">
+                <ion-slide ng-repeat="difunto in data.difuntos">
+                    <table border="0" width="100%">
+                        <tr>
+                            <td align="center">
+                                <img height="134" ng-src="{{difunto.url_avatar}}" width="133">
+                                </img>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="title11">
+                                    Plan Gratuito
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="title11" ng-if="difunto.estado == 1">
+                                    Biografia Activada
+                                </div>
+                                <div class="title11" ng-if="difunto.estado == 2">
+                                    Biografia por Activar
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="title11">
+                                    {{difunto.nombres}} {{difunto.ap_paterno}}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="title10">
+                                    *Titular/Amigo
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="title10" ng-if="difunto.estado == 1">
+                                    <a class="boton-slide" href="#" role="button">
+                                        Administrar
+                                    </a>
+                                </div>
+                                <div class="title10" ng-if="difunto.estado == 2">
+                                    <a class="boton-slide" href="#" role="button">
+                                        Activar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <br/>
+                </ion-slide>
+            </ion-slide-box>
+            <h5 id="page25-heading104" style="color:#505151;font-weight:600;text-align:center;">
+                Mi Último Comentario
+            </h5>
+            <h4 id="page25-heading103" ng-if="data.ultComentario == null" style="color:#505151;font-weight:600;text-align:center;">
+                No hay Comentario por mostrar
+            </h4>
         </form>
-        <div class="perfil2">
-            <img src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+        <div class="perfil14" ng-if="data.ultComentario != null">
+            <img ng-src="{{data.ultComentario.url_avatar}}">
             </img>
         </div>
-        <h1 class="col3" id="page25-heading105" style="color:#555353;">
-            Nombre Biografía - Escribiste el siguiente comentario: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        <h1 class="col3" id="page25-heading105" ng-if="data.ultComentario != null" style="color:#555353;">
+            {{data.ultComentario.nombres}} {{data.ultComentario.ap_paterno}} - Escribiste el siguiente comentario: {{data.ultComentario.texto | cut:true:50:' ...'}}
         </h1>
         <a class="button button-balanced boton" id="page25-button54" ui-sref="menu.page26">
             Ver Comentarios

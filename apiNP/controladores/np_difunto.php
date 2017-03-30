@@ -187,7 +187,7 @@ class np_difunto
 
             $respuesta = $difuntosBD;
 
-            return ["estado" => 1, "usuario" => $respuesta];
+            return ["estado" => 1, "difuntos" => $respuesta];
         } else {
             throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
                 "Ha ocurrido un error");
@@ -201,9 +201,9 @@ class np_difunto
         self::ID . "," .
         self::NOMBRES . "," .
         self::APPATERNO . "," .
+        self::ESTADO . "," .
         self::IDPLAN . "," .
-        self::URLAVATAR . "," .
-        self::IDPLAN .
+        self::URLAVATAR .
         " FROM " . self::NOMBRE_TABLA .
         " WHERE " . self::IDADMIN . " =:id";
 

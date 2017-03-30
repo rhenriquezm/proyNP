@@ -3,6 +3,7 @@
 //require 'controladores/usuarios.php';
 //require 'controladores/contactos.php';
 require 'controladores/np_usuario.php';
+require 'controladores/np_comentario.php';
 require 'controladores/np_difunto.php';
 require 'controladores/np_pais.php';
 require 'controladores/np_region.php';
@@ -53,7 +54,7 @@ if (isset($_GET['PATH_INFO'])) {
 
 // Obtener recurso
 $recurso             = array_shift($peticion);
-$recursos_existentes = array('np_usuario', 'np_pais', 'np_region', 'REG_POR_PAIS', 'np_servicios', 'np_difunto');
+$recursos_existentes = array('np_usuario', 'np_pais', 'np_region', 'REG_POR_PAIS', 'np_servicios', 'np_difunto', 'np_comentario');
 
 // Comprobar si existe el recurso
 if (!in_array($recurso, $recursos_existentes)) {
@@ -157,6 +158,23 @@ if ($recurso == 'np_difunto') {
             $vista->imprimir(np_servicios::get($peticion));
         case 'post':
             $vista->imprimir(np_servicios::post($peticion));
+        case 'put':
+        case 'delete':
+        default:
+            // Método no aceptado
+            $vista->estado = 405;
+            $cuerpo        = [
+                "estado"  => ESTADO_METODO_NO_PERMITIDO,
+                "mensaje" => utf8_encode("Método no permitido"),
+            ];
+            $vista->imprimir($cuerpo);
+    }
+
+} else if ($recurso == 'np_comentario') {
+    switch ($metodo) {
+        case 'get':
+        case 'post':
+            $vista->imprimir(np_comentario::post($peticion));
         case 'put':
         case 'delete':
         default:

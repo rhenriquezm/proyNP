@@ -443,8 +443,48 @@
             // });
         }
     })
-    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location, $ionicHistory) {
+    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location, $ionicHistory, $ionicSlideBoxDelegate) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        $scope.probando = function() {
+            alert("FUNCA");
+        }
+        $scope.data = {};
+        $http.post("http://localhost/proyNP/apiNP/np_difunto/obtenerdifuntos", {
+            'id': localStorageService.get("np_usuario").id
+        }).then(function(res) {
+            var estado = res.data.estado;
+            if (estado == 1) {
+                $scope.data.difuntos = res.data.difuntos;
+                $ionicSlideBoxDelegate.update();
+            }
+            /*else {
+                           $ionicLoading.hide(); //Termina de mostrar el "Cargando"
+                           var alertPopup = $ionicPopup.alert({
+                               title: 'Oops',
+                               template: 'Algo Fallo'
+                           });
+                       }*/
+        });
+        //Fin Parte de obtener difunto
+        //Ultimo Comentario
+        $http.post("http://localhost/proyNP/apiNP/np_comentario/ultimocomentario", {
+            'id': localStorageService.get("np_usuario").id
+        }).then(function(res) {
+            var estado = res.data.estado;
+            if (estado == 1) {
+                $scope.data.ultComentario = res.data.ultComentario;
+                console.log($scope.data.ultComentario);
+            }
+            console.log("AAAAAAAAAAAAAAAAAAAAA");
+            console.log($scope.data.ultComentario);
+            /*else {
+                           $ionicLoading.hide(); //Termina de mostrar el "Cargando"
+                           var alertPopup = $ionicPopup.alert({
+                               title: 'Oops',
+                               template: 'Algo Fallo'
+                           });*/
+        });
+        //Fin Ultimo Comentario
         $scope.perfil_usuario = {};
         var nuevoUsuario = {};
         localStorageService.set('nuevoUsuario', nuevoUsuario);
@@ -580,4 +620,24 @@
             }
         };
     }])
+    app.filter('cut', function() {
+        return function(value, wordwise, max, tail) {
+            if (!value) return '';
+            max = parseInt(max, 10);
+            if (!max) return value;
+            if (value.length <= max) return value;
+            value = value.substr(0, max);
+            if (wordwise) {
+                var lastspace = value.lastIndexOf(' ');
+                if (lastspace !== -1) {
+                    //Also remove . and , so its gives a cleaner result.
+                    if (value.charAt(lastspace - 1) === '.' || value.charAt(lastspace - 1) === ',') {
+                        lastspace = lastspace - 1;
+                    }
+                    value = value.substr(0, lastspace);
+                }
+            }
+            return value + (tail || ' …');
+        };
+    });
 }());
