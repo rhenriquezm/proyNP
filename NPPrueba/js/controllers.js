@@ -129,66 +129,6 @@
         $scope.sizeLimit = 10585760; // 10MB in Bytes
         $scope.uploadProgress = 0;
         $scope.creds = {};
-
-        function upload(file) {
-            AWS.config.update({
-                accessKeyId: "AKIAJCFGX4TXMKJOMHMQ",
-                secretAccessKey: "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"
-            });
-            AWS.config.region = 'us-west-2';
-            var bucket = new AWS.S3({
-                params: {
-                    Bucket: "nplace-movil"
-                }
-            });
-            if (file) {
-                // Perform File Size Check First
-                var fileSize = Math.round(parseInt(file.size));
-                if (fileSize > $scope.sizeLimit) {
-                    console.log('Sorry, your attachment is too big. <br/> Maximum ' + $scope.fileSizeLabel() + ' file attachment allowed', 'File Too Large');
-                    return false;
-                }
-                // Prepend Unique String To Prevent Overwrites
-                var uniqueFileName = $scope.uniqueString() + '-' + file.name;
-                $scope.nuevoUsuario.url_avatar = "https://s3-us-west-2.amazonaws.com/nplace-movil/" + uniqueFileName;
-                var params = {
-                    Key: uniqueFileName,
-                    ContentType: file.type,
-                    Body: file,
-                    ServerSideEncryption: 'AES256',
-                    ACL: 'public-read'
-                };
-                bucket.putObject(params, function(err, data) {
-                    if (err) {
-                        console.log(err.message, err.code);
-                        return false;
-                    } else {
-                        setTimeout(function() {
-                            $scope.uploadProgress = 0;
-                            $scope.$digest();
-                        }, 4000);
-                    }
-                }).on('httpUploadProgress', function(progress) {
-                    $scope.uploadProgress = Math.round(progress.loaded / progress.total * 100);
-                    $scope.$digest();
-                });
-            } else {
-                // No File Selected
-                console.log('Please select a file to upload');
-            }
-        }
-        $scope.fileSizeLabel = function() {
-            // Convert Bytes To MB
-            return Math.round($scope.sizeLimit / 1024 / 1024) + 'MB';
-        };
-        $scope.uniqueString = function() {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < 8; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        };
         ///// Pais y Region 
         $scope.JSONPaises = {};
         $scope.JSONRegiones = {};
@@ -216,9 +156,11 @@
         //////////////
         $scope.registrar = function() {
             console.log($scope.nuevoUsuario.url_avatar);
-            if ($scope.data.imagen != null) {
-                upload($scope.data.imagen);
-            }
+            //if ($scope.data.imagen != null) {
+            //    upload($scope.data.imagen);
+            //}
+            //Modificar despues
+            $scope.nuevoUsuario.url_avatar = null;
             loginFactory.data.usuario = $scope.nuevoUsuario;
             $ionicHistory.clearCache().then(function() {
                 $state.go("menu.page28");
@@ -238,66 +180,6 @@
         $scope.sizeLimit = 10585760; // 10MB in Bytes
         $scope.uploadProgress = 0;
         $scope.creds = {};
-
-        function upload(file) {
-            AWS.config.update({
-                accessKeyId: "AKIAJCFGX4TXMKJOMHMQ",
-                secretAccessKey: "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"
-            });
-            AWS.config.region = 'us-west-2';
-            var bucket = new AWS.S3({
-                params: {
-                    Bucket: "nplace-movil"
-                }
-            });
-            if (file) {
-                // Perform File Size Check First
-                var fileSize = Math.round(parseInt(file.size));
-                if (fileSize > $scope.sizeLimit) {
-                    console.log('Sorry, your attachment is too big. <br/> Maximum ' + $scope.fileSizeLabel() + ' file attachment allowed', 'File Too Large');
-                    return false;
-                }
-                // Prepend Unique String To Prevent Overwrites
-                var uniqueFileName = $scope.uniqueString() + '-' + file.name;
-                $scope.datosUsuario.url_avatar = "https://s3-us-west-2.amazonaws.com/nplace-movil/" + uniqueFileName;
-                var params = {
-                    Key: uniqueFileName,
-                    ContentType: file.type,
-                    Body: file,
-                    ServerSideEncryption: 'AES256',
-                    ACL: 'public-read'
-                };
-                bucket.putObject(params, function(err, data) {
-                    if (err) {
-                        console.log(err.message, err.code);
-                        return false;
-                    } else {
-                        setTimeout(function() {
-                            $scope.uploadProgress = 0;
-                            $scope.$digest();
-                        }, 4000);
-                    }
-                }).on('httpUploadProgress', function(progress) {
-                    $scope.uploadProgress = Math.round(progress.loaded / progress.total * 100);
-                    $scope.$digest();
-                });
-            } else {
-                // No File Selected
-                console.log('Please select a file to upload');
-            }
-        }
-        $scope.fileSizeLabel = function() {
-            // Convert Bytes To MB
-            return Math.round($scope.sizeLimit / 1024 / 1024) + 'MB';
-        };
-        $scope.uniqueString = function() {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < 8; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        };
         $scope.sexos = [{
             "id": "M",
             "nombre": "Masculino"
@@ -339,13 +221,19 @@
             });
         }
         //Fecha de Nacimiento
+        var foto = "";
+
         function cargarDatos() {
             datosUsuarios.fec_nacimiento = new Date(localStorageService.get('nuevoUsuario').fec_nacimiento);
+            foto = datosUsuarios.url_avatar;
             $scope.datosUsuario = datosUsuarios;
             $scope.datosH = datosHistoricos;
             $scope.datosUsuario.clave = null;
             $scope.claveConfirm = null;
             $scope.data = {};
+            $scope.data.imagen = {
+                name: "Subir Foto"
+            };
         }
         cargarDatos();
         /** function compararClave() {
@@ -369,7 +257,6 @@
             }
         });
         $scope.actualizar = function() {
-            upload($scope.data.imagen);
             datosHistoricos.fec_nacimiento = new Date(datosHistoricos.fec_nacimiento);
             if (!$scope.cambio) {
                 loginFactory.data = {};
@@ -377,12 +264,19 @@
                 loginFactory.data.nombres = $scope.datosUsuario.nombres;
                 loginFactory.data.ap_paterno = $scope.datosUsuario.ap_paterno;
                 loginFactory.data.ap_materno = $scope.datosUsuario.ap_materno;
+                loginFactory.data.fec_nacimiento = $scope.datosUsuario.fec_nacimiento;
                 loginFactory.data.sexo = $scope.datosUsuario.sexo;
                 loginFactory.data.nro_documento_identif = $scope.datosUsuario.nro_documento_identif;
                 loginFactory.data.idPais = $scope.datosUsuario.idPais;
                 loginFactory.data.idRegion = $scope.datosUsuario.idRegion;
                 loginFactory.data.clave = $scope.datosUsuario.clave;
-                loginFactory.data.url_avatar = $scope.datosUsuario.url_avatar;
+                loginFactory.data.imagen = $scope.data.imagen;
+                //Modificar esto despues 
+                if ($scope.data.imagen.name != "Subir Foto") {
+                    loginFactory.data.url_avatar = foto
+                } else {
+                    loginFactory.data.url_avatar = foto;
+                }
                 $ionicHistory.clearCache().then(function() {
                     $state.go("menu.page15");
                 });
@@ -406,11 +300,27 @@
     app.controller('page10Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page15Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $location, $ionicPopup) {
+    app.controller('page15Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $timeout, $location, $ionicPopup) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-        var usuarioModificado = loginFactory.data;
-        $scope.usuarioModificado = loginFactory.data;
+        var usuarioModificado = {};
+        $scope.usuarioModificado = {};
+
+        function cargarDatos() {
+            usuarioModificado = loginFactory.data;
+            //upload(usuarioModificado.imagen);
+            //console.log(usuarioModificado);
+            $timeout(function() {
+                $scope.usuarioModificado = usuarioModificado;
+                if (usuarioModificado.sexo === "M") {
+                    $scope.usuarioModificado.sexo = "Masculino";
+                } else {
+                    $scope.usuarioModificado.sexo = "Femeninio";
+                }
+            }, 1000);
+        }
+        cargarDatos();
         $scope.confirmar = function() {
+            console.log(usuarioModificado);
             $http.put("http://localhost/proyNP/apiNP/np_usuario/actualizarUsuario", {
                 'id': usuarioModificado.id,
                 'nombres': usuarioModificado.nombres,
@@ -445,9 +355,6 @@
     })
     app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location, $ionicHistory, $ionicSlideBoxDelegate) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-        $scope.probando = function() {
-            alert("FUNCA");
-        }
         $scope.data = {};
         $http.post("http://localhost/proyNP/apiNP/np_difunto/obtenerdifuntos", {
             'id': localStorageService.get("np_usuario").id
@@ -475,8 +382,6 @@
                 $scope.data.ultComentario = res.data.ultComentario;
                 console.log($scope.data.ultComentario);
             }
-            console.log("AAAAAAAAAAAAAAAAAAAAA");
-            console.log($scope.data.ultComentario);
             /*else {
                            $ionicLoading.hide(); //Termina de mostrar el "Cargando"
                            var alertPopup = $ionicPopup.alert({
@@ -495,6 +400,7 @@
             if (estado == 1) {
                 localStorageService.set('nuevoUsuario', res.data.usuario);
                 $scope.perfil_usuario = res.data.usuario;
+                $scope.perfil_usuario.fec_nacimiento = new Date($scope.perfil_usuario.fec_nacimiento);
             } else {
                 $ionicLoading.hide(); //Termina de mostrar el "Cargando"
                 var alertPopup = $ionicPopup.alert({
@@ -638,6 +544,21 @@
                 }
             }
             return value + (tail || ' …');
+        };
+    });
+    app.directive('pickFile', function() {
+        return {
+            restrict: 'EA',
+            template: '<button class="button">Pick</button>' + '<input type="file" style="display: none !important">',
+            link: function($scope, $element) {
+                var input = $element.find('input');
+                var button = $element.find('button');
+                var evtHandler = function() {
+                    input[0].click();
+                };
+                button.on('click', evtHandler)
+                app
+            }
         };
     });
 }());

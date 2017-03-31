@@ -16,22 +16,22 @@
         </h4>
         <form class="list" id="page15-form15">
             <div class="perfil">
-                <img src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+                <img src="{{usuarioModificado.url_avatar}}" style="display: block; margin-left: auto; margin-right: auto;">
                 </img>
             </div>
-            <h1 id="page15-heading52" style="color:#505151;font-weight:600;text-align:center;">
+            <h3 class="ion-person" id="page15-heading52" style="color:#505151;font-weight:600;text-align:center;">
                 {{usuarioModificado.nombres}} {{usuarioModificado.ap_paterno}} {{usuarioModificado.ap_materno}}
-            </h1>
-            <h3 id="page15-heading53" style="color:#555353;text-align:center;">
+            </h3>
+            <h3 class="ion-mail" id="page15-heading53" style="color:#555353;text-align:center;">
                 {{usuarioModificado.email}}
             </h3>
-            <h3 id="page15-heading59" style="color:#555353;text-align:center;">
+            <h3 class="ion-android-people" id="page15-heading59" style="color:#555353;text-align:center;">
                 {{usuarioModificado.sexo}}
             </h3>
-            <h3 id="page15-heading54" style="color:#555353;text-align:center;">
-                Nacimiento {{usuarioModificado.fec_nacimiento}}
+            <h3 class="ion-calendar" id="page15-heading54" style="color:#555353;text-align:center;">
+                {{usuarioModificado.fec_nacimiento | date}}
             </h3>
-            <h3 id="page15-heading56" style="color:#555353;text-align:center;">
+            <h3 class="ion-information-circled" id="page15-heading56" style="color:#555353;text-align:center;">
                 {{usuarioModificado.nro_documento_identif}}
             </h3>
             <h3 id="page15-heading57" style="color:#555353;text-align:center;">

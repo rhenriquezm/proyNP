@@ -21,23 +21,17 @@
                 </img>
             </div>
             <br/>
-            <h3 "="" class="ion-person" id="page25-heading97" style="color:#505151;font-size:18px;font-weight:500;text-align:center;">
+            <h3 class="ion-person" id="page25-heading97" style="color:#505151;font-size:18px;font-weight:500;text-align:center;">
                 {{perfil_usuario.nombres}} {{perfil_usuario.ap_paterno}} {{perfil_usuario.ap_materno}}
             </h3>
             <h3 class="ion-email" id="page25-heading98" style="color:#505151;font-size:16px;font-weight:500;text-align:center;">
                 {{perfil_usuario.email}}
             </h3>
-            <h3 id="page25-heading99" style="color:#555353;text-align:center;">
-                {{perfil_usuario.sexo}}
-            </h3>
             <h3 class="ion-calendar" h3="" id="page25-heading100" style="color:#555353;text-align:center;">
-                {{perfil_usuario.fec_nacimiento}}
+                {{perfil_usuario.fec_nacimiento | date }}
             </h3>
-            <h3 id="page25-heading101" style="color:#555353;text-align:center;">
-                {{perfil_usuario.nro_documento_identif}}
-            </h3>
-            <h3 id="page25-heading102" style="color:#555353;text-align:center;">
-                {{perfil_usuario.nombrePais}} {{perfil_usuario.nombreRegion}}
+            <h3 class="ion-flag" id="page25-heading102" style="color:#555353;text-align:center;">
+                {{perfil_usuario.nombrePais}} - {{perfil_usuario.nombreRegion}}
             </h3>
             <a class="button button-assertive boton" id="page25-button51" ng-click="modificarPerfil()">
                 Editar Datos

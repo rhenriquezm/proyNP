@@ -11403,7 +11403,7 @@ a.button .icon:before, a.button.icon:before, a.button.icon-left:before, a.button
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     -ms-border-radius: 6px;
-    width: 80% !important;
+    width: 77% !important;
     margin-left: 5% !important;
     margin-top: 10px !important;
     -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -11667,7 +11667,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     border-radius: 0px;
     flex: 1 1 220px;
     margin: 0px;
-    width: 80%;
+    width: 75%;
 }
 
 .placeholder-icon:first-child {
@@ -11808,11 +11808,6 @@ h5, .h5 {
     padding-left: 2px;
     font-weight: 300;
     font-size: 17px;
-}
-
-.add {
-    float: left;
-    margin-top: 10px;
 }
 
 .eliminar {
@@ -12310,4 +12305,22 @@ h3, .h3 {
     line-height: 1.2;
     float: left;
     height: 100%;
+}
+
+.add {
+    float: left;
+    margin-top: 10px;
+}
+
+.add input {
+    float: left;
+    margin-top: 10px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 0;
+    padding: 0;
+    filter: Alpha(Opacity=0);
+    -moz-opacity: 0;
+    opacity: 0;
 }

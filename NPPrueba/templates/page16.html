@@ -34,8 +34,14 @@
         </h4>
         <form class="list" id="page16-form16" name="editReg" novalidate="">
             <label class="item item-input inp2" id="page16-input37">
-                <input file-model="data.imagen" input="" type="file"/>
+                <input disabled="true" placeholder="{{datosUsuario.url_avatar = data.imagen.name}}" type="text">
+                </input>
             </label>
+            <div class="add">
+                <img src="img/Kn7BEwckT7u4ISpIRH22_add-01.png" style="display: block; width: auto; margin-left: auto;">
+                </img>
+                <input file-model="data.imagen" input="" type="file"/>
+            </div>
             <label class="item item-input inp" id="page16-input38">
                 <input disabled="true" ng-model="datosUsuario.email" placeholder="Correo" type="text">
                 </input>
