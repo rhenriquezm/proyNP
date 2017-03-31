@@ -65,6 +65,8 @@ class np_difunto
     {
         if ($peticion[0] == "obtenerdifuntos") {
             return self::obtenerDifuntos();
+        } else if ($peticion[0] == "obtenerdifuntocompleto") {
+            return self::obtenerDifuntoCompleto();
         } else {
             throw new ExcepcionApi(self::ESTADO_URL_INCORRECTA, "Url mal formada", 400);
         }
@@ -214,6 +216,64 @@ class np_difunto
 
             if ($sentencia->execute()) {
                 return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e) {
+
+        }
+    }
+
+    public function obtenerDifuntoCompleto()
+    {
+        $cuerpo  = file_get_contents('php://input');
+        $difunto = json_decode($cuerpo); //json
+
+        $id = $difunto->id;
+
+        $difuntosBD = self::obtenerDifuntoCompletoPorId($id);
+
+        if ($difuntosBD != null) {
+            http_response_code(200);
+
+            $respuesta = $difuntosBD;
+
+            return ["estado" => 1, "difunto" => $respuesta];
+        } else {
+            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
+                "Ha ocurrido un error");
+        }
+    }
+
+    public function obtenerDifuntoCompletoPorId($id)
+    {
+
+        $comando = "SELECT " .
+            "di.nombres" . "," .
+            "di.ap_paterno" . "," .
+            "di.fec_nacimiento" . "," .
+            "di.fec_fallecimiento" . "," .
+            "di.epitafio" . "," .
+            "di.biografia" . "," .
+            "di.url_avatar" . "," .
+            "pa.nombre nombrepais" . "," .
+            "re.nombre nombreregion" . "," .
+            "ce.nombre nombreCementerio" .
+            " FROM np_difunto as di inner join np_pais as pa" .
+            " on di.idPais = pa.id inner join np_region as re " .
+            " on di.idRegion = re.id inner join np_lugar_entierro as ce" .
+            " on di.idLugarEntierro = ce.id" .
+            " WHERE di.id" .
+            " =:id";
+
+        try {
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
+
+            $sentencia->bindParam("id", $id);
+
+            if ($sentencia->execute()) {
+                return $sentencia->fetch(PDO::FETCH_ASSOC);
             } else {
                 return null;
             }

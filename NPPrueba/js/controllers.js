@@ -298,9 +298,23 @@
         $scope.np_usuario = localStorageService.get('np_usuario');
         alert("ID: " + loginFactory.data.idDifunto);
     })
-    app.controller('page10Ctrl', function($scope, $stateParams, localStorageService, loginFactory) {
+    app.controller('page10Ctrl', function($scope, $http, $ionicPopup, $stateParams, localStorageService, loginFactory) {
         $scope.np_usuario = localStorageService.get('np_usuario');
-        alert("ID: " + loginFactory.data.idDifunto);
+        var id = loginFactory.data.idDifunto;
+        $scope.difunto = {};
+        $http.post("http://localhost/proyNP/apiNP/np_difunto/obtenerdifuntocompleto", {
+            'id': id
+        }).then(function(res) {
+            var estado = res.data.estado;
+            if (estado == 1) {
+                $scope.difunto = res.data.difunto;
+            } else {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Oops',
+                    template: 'Difunto no encontrado'
+                });
+            }
+        });
     })
     app.controller('page15Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $timeout, $location, $ionicPopup) {
         $scope.np_usuario = localStorageService.get('np_usuario');
@@ -346,6 +360,7 @@
                         title: 'Oops',
                         template: 'No se pudo guardar'
                     });
+                    alert("ID: " + loginFactory.data.idDifunto);
                 }
             });
         }

@@ -16,7 +16,7 @@
         </h4>
         <form class="list" id="page10-form10">
             <div class="perfil">
-                <img src="img/sArxEldbQSqmkN46gHBU_perfil1.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+                <img src="{{difunto.url_avatar}}" style="display: block; margin-left: auto; margin-right: auto;">
                 </img>
             </div>
             <div class="iconos1">
@@ -32,30 +32,29 @@
                 </a>
             </div>
             <h1 id="page10-heading15" style="color:#505151;font-weight:600;text-align:center;">
-                Carolina María Riquelme Vera
+                {{difunto.nombres}} {{difunto.ap_paterno}}
             </h1>
             <h3 id="page10-heading18" style="color:#555353;text-align:center;">
-                Sexo Femenino
+                Sexo POCAZO (casi nada desde 25 años antes de su deceso)
             </h3>
             <h3 id="page10-heading19" style="color:#555353;text-align:center;">
-                Nacimiento 22/12/1955
+                Nacimiento {{difunto.fec_nacimiento | date}}
             </h3>
             <h3 id="page10-heading20" style="color:#555353;text-align:center;">
-                Defunción 22/10/1990
+                Defunción {{difunto.fec_fallecimiento | date}}
             </h3>
             <h3 id="page10-heading22" style="color:#555353;text-align:center;">
-                Enterrada en Cementerio General - Chile
+                Enterrada en {{difunto.nombreCementerio}} - {{difunto.nombrePais}}
             </h3>
             <h3 id="page10-heading23" style="color:#555353;text-align:center;">
-                Biografía Creada por su nieta
+                Biografía Creada por su nieta ???
             </h3>
             <h3 id="page10-heading21" style="color:#2070C0;font-style:italic;text-align:center;">
-                Fuiste la mejor madre del mundo...
+                {{difunto.epitafio}}
             </h3>
             <div class="show-list-numbers-and-dots biografia" id="page10-markdown1" style="text-align:center;">
                 <p style="color:#505151;">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido
-          usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.
+                    {{difunto.biografia}}
                 </p>
             </div>
             <a class="button button-balanced boton" id="page10-button10" ui-sref="menu.page9">
