@@ -87,12 +87,12 @@
                         <tr>
                             <td>
                                 <div class="title10" ng-if="difunto.estado == 1">
-                                    <a class="boton-slide" href="#" role="button">
-                                        Administrar
+                                    <a class="boton-slide" ng-click="verBio(difunto.id)" role="button">
+                                        Ver Biografia
                                     </a>
                                 </div>
                                 <div class="title10" ng-if="difunto.estado == 2">
-                                    <a class="boton-slide" href="#" role="button">
+                                    <a class="boton-slide" ng-click="activarBio(difunto.id)" role="button">
                                         Activar
                                     </a>
                                 </div>

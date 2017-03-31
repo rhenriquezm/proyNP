@@ -1,0 +1,3 @@
+Para traer comentarios por usuarios
+
+select * from np_comentario where idUsuario = 719

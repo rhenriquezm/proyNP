@@ -294,11 +294,13 @@
     app.controller('page20Ctrl', function($scope, $stateParams, localStorageService) {
         $scope.np_usuario = localStorageService.get('np_usuario');
     })
-    app.controller('page9Ctrl', function($scope, $stateParams, localStorageService) {
+    app.controller('page9Ctrl', function($scope, $stateParams, localStorageService, loginFactory) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        alert("ID: " + loginFactory.data.idDifunto);
     })
-    app.controller('page10Ctrl', function($scope, $stateParams, localStorageService) {
+    app.controller('page10Ctrl', function($scope, $stateParams, localStorageService, loginFactory) {
         $scope.np_usuario = localStorageService.get('np_usuario');
+        alert("ID: " + loginFactory.data.idDifunto);
     })
     app.controller('page15Ctrl', function($ionicHistory, $scope, $stateParams, localStorageService, loginFactory, $http, $state, $ionicLoading, $timeout, $location, $ionicPopup) {
         $scope.np_usuario = localStorageService.get('np_usuario');
@@ -353,7 +355,7 @@
             // });
         }
     })
-    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location, $ionicHistory, $ionicSlideBoxDelegate) {
+    app.controller('page25Ctrl', function($scope, $stateParams, localStorageService, $http, $ionicLoading, $ionicPopup, $state, $location, $ionicHistory, $ionicSlideBoxDelegate, loginFactory) {
         $scope.np_usuario = localStorageService.get('np_usuario');
         $scope.data = {};
         $http.post("http://localhost/proyNP/apiNP/np_difunto/obtenerdifuntos", {
@@ -412,6 +414,18 @@
         $scope.modificarPerfil = function() {
             $ionicHistory.clearCache().then(function() {
                 $state.go("menu.page16");
+            });
+        }
+        $scope.verBio = function(id) {
+            loginFactory.data.idDifunto = id;
+            $ionicHistory.clearCache().then(function() {
+                $state.go("menu.page10");
+            });
+        }
+        $scope.activarBio = function(id) {
+            loginFactory.data.idDifunto = id;
+            $ionicHistory.clearCache().then(function() {
+                $state.go("menu.page9");
             });
         }
         //$scope.usuario = {};
